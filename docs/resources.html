@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>resources.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90">学习资源</h1>
+<h2 id="ctf%E5%9B%BE%E4%B9%A6">CTF图书</h2>
+<style type="text/css" rel="stylesheet">
+  .grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+</style>
+<div class="grid-container">
+ <figure> 
+   <img src="https://image12.bookschina.com/2023/20231126/1/9176102.jpg" alt="AWD特训营：技术解析、赛题实战与竞赛技巧 " style="height:250px" /> 
+   <figcaption> 
+    <cite>AWD特训营：技术解析、赛题实战与竞赛技巧 </cite>
+    <br /> 
+    <span><b>作者:</b>吴涛、张道全、王玉琪</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-10</span> 
+   </figcaption> 
+  </figure>
+  <figure>
+  <img src="https://image12.bookschina.com/2023/20230921/1/9155453.jpg" alt="CTF那些事儿" style="height:250px">
+  <figcaption> 
+    <cite>CTF那些事儿</cite>
+    <br /> 
+    <span><b>作者:</b>北航Lancet战队</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-08</span> 
+   </figcaption>
+   </figure>
+   <figure> 
+   <img src="https://image12.bookschina.com/2023/20230615/1/9103627.jpg" alt="CTF实战:从入门到提升" style="height:250px" /> 
+   <figcaption> 
+    <cite>CTF实战:从入门到提升</cite>
+    <br /> 
+    <span><b>作者:</b>苗春雨、叶雷鹏（恒星实验室）</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-05</span> 
+   </figcaption> 
+  </figure>
+</figure>
+<figure> 
+   <img src="https://image12.bookschina.com/2023/20231211/1/9129286.jpg" alt="CTF实战 技术、解题与进阶" style="height:250px" /> 
+   <figcaption> 
+    <cite>CTF实战 技术、解题与进阶</cite>
+    <br /> 
+    <span><b>作者:</b>ChaMd5安全团队</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-07</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2021/20210430/1/8543218.jpg" alt="极限黑客攻防:CTF赛题揭秘" style="height:250px" /> 
+   <figcaption> 
+    <cite>极限黑客攻防:CTF赛题揭秘</cite>
+    <br /> 
+    <span><b>作者:</b>天融信阿尔法实验室</span>
+    <br /> 
+    <span><b>出版时间:</b>2021-05</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2020/20201121/1/8412789.jpg" alt="从0到1：CTFer成长之路" style="height:250px" /> 
+   <figcaption> 
+    <cite>从0到1：CTFer成长之路</cite>
+    <br /> 
+    <span><b>作者:</b>Null战队</span>
+    <br /> 
+    <span><b>出版时间:</b>2020-09</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2020/20200903/2/8347202.jpg" alt="CTF特训营" style="height:250px" /> 
+   <figcaption> 
+    <cite>CTF特训营:技术详解、解题方法与竞赛技巧</cite>
+    <br /> 
+    <span><b>作者:</b>FlappyPig战队</span>
+    <br /> 
+    <span><b>出版时间:</b>2020-06</span> 
+   </figcaption> 
+  </figure>
+</div>
+<h2 id="ctf%E5%9C%A8%E7%BA%BF%E8%AE%AD%E7%BB%83%E5%B9%B3%E5%8F%B0">CTF在线训练平台</h2>
+<h3 id="%E5%9B%BD%E5%86%85">国内</h3>
+<ul>
+<li><a href="https://www.nssctf.cn/">NSSCTF|在线CTF平台</a></li>
+<li><a href="https://buuoj.cn/">BUUCTF在线评测</a></li>
+<li><a href="https://ctf.show/">ctf.show</a></li>
+<li><a href="https://ctf.bugku.com/">Bugku CTF</a></li>
+<li><a href="https://www.ctfhub.com/">CTFHub</a></li>
+<li><a href="https://adworld.xctf.org.cn/">赛宁网安|攻防世界</a></li>
+<li><a href="https://www.ichunqiu.com/battalion">i春秋|CTF大本营</a></li>
+</ul>
+<h3 id="%E5%9B%BD%E9%99%85">国际</h3>
+<ul>
+<li><a href="https://picoctf.org/">picoCTF</a></li>
+</ul>
+<h2 id="ctf%E5%9F%B9%E8%AE%AD%E8%AF%BE%E7%A8%8B">CTF培训课程</h2>
+<ul>
+<li><a href="https://ctf-show.feishu.cn/docx/Ek2Ld95t6oRFTHx6sN6cHXpgnHg">2023年CTFshow私教课 Web系列</a></li>
+<li><a href="https://ysynrh77rj.feishu.cn/docx/F2ajdTLZfoYDl7xnwK4cgMOjnze">2023年CTFshow私教课 Pwn系列</a></li>
+<li><a href="https://www.ichunqiu.com/train/course/34">2023年星盟团队 CTF从入门到提高</a></li>
+<li><a href="https://www.ichunqiu.com/train/course/53">2023年Nu1L战队 从0到1-CTFer成长之路</a></li>
+<li><a href="https://www.kanxue.com/book-leaflet-170.htm">2023年看雪 30小时教你玩转CTF</a></li>
+<li><a href="https://www.kanxue.com/book-leaflet-105.htm">看雪 CTF训练营-Web篇</a></li>
+<li><a href="https://www.kanxue.com/book-leaflet-172.htm?items=introduce">看雪 Linux pwn 探索篇</a></li>
+</ul>
+<h2 id="web%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%8E%9F%E7%90%86">Web安全漏洞原理</h2>
+<div class="grid-container">
+<figure> 
+   <img src="https://image12.bookschina.com/2023/20231207/2/9144003.jpg" alt="白帽子讲WEB安全 第2版" style="height:250px" /> 
+   <figcaption> 
+    <cite>白帽子讲WEB安全 第2版</cite>
+    <br /> 
+    <span><b>作者:</b>吴翰清,叶敏</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-08</span> 
+   </figcaption> 
+  </figure>
+<figure> 
+   <img src="https://image12.bookschina.com/2023/20231210/2/9131674.jpg" alt="Web安全攻防:渗透测试实战指南(第二版)" style="height:250px" /> 
+   <figcaption> 
+    <cite>Web安全攻防:渗透测试实战指南(第二版)</cite>
+    <br /> 
+    <span><b>作者:</b>MS08067安全实验</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-07</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2024/20240128/2/9070422.jpg" alt="Web漏洞解析与攻防实战" style="height:250px" /> 
+   <figcaption> 
+    <cite>Web漏洞解析与攻防实战</cite>
+    <br /> 
+    <span><b>作者:</b>王放(do9gy)，龚潇(phithon)，王子航</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-04</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2015/20150301/6832186.jpg" alt="Web安全深度剖析" style="height:250px" /> 
+   <figcaption> 
+    <cite>Web安全深度剖析</cite>
+    <br /> 
+    <span><b>作者:</b>张炳帅</span>
+    <br /> 
+    <span><b>出版时间:</b>2015-04</span> 
+   </figcaption> 
+  </figure>
+</div>
+<h2 id="%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%9F%9F%E6%B8%97%E9%80%8F%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87">内网渗透、域渗透、权限提升</h2>
+<div class="grid-container">
+  <figure> 
+   <img src="http://books.ms08067.com/booklist/images/nwaqgfhdzl.jpg" alt="内网安全攻防:红队之路" style="height:250px" /> 
+   <figcaption> 
+    <cite>内网安全攻防:红队之路</cite>
+    <br /> 
+    <span><b>作者:</b>MS08067安全实验</span>
+    <br /> 
+    <span><b>出版时间:</b>2024-03</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://images.weserv.nl/?url=https://img-blog.csdnimg.cn/direct/676791851a4b47aeab809004c0604419.png" alt="权限提升技术:攻防实战与技巧" style="height:250px" /> 
+   <figcaption> 
+    <cite>权限提升技术:攻防实战与技巧</cite>
+    <br /> 
+    <span><b>作者:</b>美创科技 柳遵梁</span>
+    <br /> 
+    <span><b>出版时间:</b>2024-01</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2024/20240204/1/9239841.jpg" alt="内网渗透 实战攻略" style="height:250px" /> 
+   <figcaption> 
+    <cite>内网渗透 实战攻略</cite>
+    <br /> 
+    <span><b>作者:</b>美创科技 柳遵梁</span>
+    <br /> 
+    <span><b>出版时间:</b>2024-01</span> 
+   </figcaption> 
+  </figure>
+<figure> 
+   <img src="https://image12.bookschina.com/2023/20230124/1/8987145.jpg" alt="域渗透攻防指南" style="height:250px" /> 
+   <figcaption> 
+    <cite>域渗透攻防指南</cite>
+    <br /> 
+    <span><b>作者:</b>谢兆国（网络ID：谢公子）</span>
+    <br /> 
+    <span><b>出版时间:</b>2023-01</span> 
+   </figcaption> 
+  </figure>
+<figure> 
+   <img src="https://image12.bookschina.com/2022/20221016/2/8935097.jpg" alt="内网渗透体系建设" style="height:250px" /> 
+   <figcaption> 
+    <cite>内网渗透体系建设</cite>
+    <br /> 
+    <span><b>作者:</b>Nu1L战队</span>
+    <br /> 
+    <span><b>出版时间:</b>2022-09</span> 
+   </figcaption> 
+  </figure>
+  <figure> 
+   <img src="https://image12.bookschina.com/2020/20200725/1/8260441.jpg" alt="内网安全攻防:渗透测试实战指南" style="height:250px" /> 
+   <figcaption> 
+    <cite>内网安全攻防:渗透测试实战指南</cite>
+    <br /> 
+    <span><b>作者:</b>MS08067安全实验</span>
+    <br /> 
+    <span><b>出版时间:</b>2018-01</span> 
+   </figcaption> 
+  </figure>
+</div>
+<h2 id="web%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1">Web代码审计</h2>
+<div class="grid-container">
+  <figure>
+    <img src="https://image12.bookschina.com/2021/20211113/1/8687367.jpg" alt="网络安全Java代码审计实战" style="height:250px" />
+    <figcaption>
+      <cite>网络安全Java代码审计实战</cite>
+      <br />
+      <span>
+        <b>作者:</b>高昌盛(奇安信)</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2021-10</span>
+    </figcaption>
+  </figure>
+  <figure>
+    <img src="https://image12.bookschina.com/2022/20221222/1/8639300.jpg" alt="Java代码审计(入门篇)" style="height:250px" />
+    <figcaption>
+      <cite>Java代码审计(入门篇)</cite>
+      <br />
+      <span>
+        <b>作者:</b>MS08067安全实验</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2021-08</span>
+    </figcaption>
+  </figure>
+    <figure>
+    <img src="https://image12.bookschina.com/2015/20150726/7076970.jpg" alt="代码审计-企业级Web代码安全架构" style="height:250px" />
+    <figcaption>
+      <cite>代码审计-企业级Web代码安全架构</cite>
+      <br />
+      <span>
+        <b>作者:</b>尹毅(网名Seay)</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2016-01</span>
+    </figcaption>
+  </figure>
+</div>
+<h2 id="%E8%BD%AF%E4%BB%B6%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98">软件漏洞挖掘</h2>
+<div class="grid-container">
+<figure>
+    <img src="https://image12.bookschina.com/2024/20240117/1/9218579.jpg" alt="漏洞战争:软件漏洞分析精要(修订版)" style="height:250px" />
+    <figcaption>
+      <cite>漏洞战争:软件漏洞分析精要(修订版)</cite>
+      <br />
+      <span>
+        <b>作者:</b>林桠泉（网络ID：riusksk、泉哥、林大夫）</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2024-01</span>
+    </figcaption>
+  </figure>
+</div>
+<h2 id="%E6%99%BA%E8%83%BD%E7%A1%AC%E4%BB%B6%E5%AE%89%E5%85%A8%E8%BD%AF%E4%BB%B6%E6%97%A0%E7%BA%BF%E7%94%B5%E8%BF%91%E6%BA%90%E6%B8%97%E9%80%8F">智能硬件安全、软件无线电、近源渗透</h2>
+<div class="grid-container">
+<figure>
+<img src="https://image12.bookschina.com/2020/20200117/2/8240348.jpg" alt="黑客大揭秘 近源渗透测试" style="height:250px" />
+    <figcaption>
+      <cite>黑客大揭秘 近源渗透测试</cite>
+      <br />
+      <span>
+        <b>作者:</b>柴坤哲（sweeper）</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2020-01</span>
+    </figcaption>
+  </figure>
+  <figure>
+  <img src="https://images.weserv.nl/?url=https://img2.doubanio.com/view/subject/l/public/s29578641.jpg" alt="智能汽车安全攻防大揭秘" style="height:250px" />
+    <figcaption>
+      <cite>智能汽车安全攻防大揭秘</cite>
+      <br />
+      <span>
+        <b>作者:</b>360独角兽安全团队</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2017-10</span>
+    </figcaption>
+  </figure>
+  <figure>
+  <img src="https://images.weserv.nl/?url=https://img2.doubanio.com/view/subject/l/public/s29235061.jpg" alt="硬件安全攻防大揭秘" style="height:250px" />
+    <figcaption>
+      <cite>硬件安全攻防大揭秘</cite>
+      <br />
+      <span>
+        <b>作者:</b>360独角兽安全团队</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2017-02</span>
+    </figcaption>
+  </figure>
+  <figure>
+  <img src="https://images.weserv.nl/?url=https://img3.doubanio.com/view/subject/l/public/s28628342.jpg" alt="无线电安全攻防大揭秘" style="height:250px" />
+    <figcaption>
+      <cite>无线电安全攻防大揭秘</cite>
+      <br />
+      <span>
+        <b>作者:</b>360独角兽安全团队</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2016-05</span>
+    </figcaption>
+  </figure>
+  <figure>
+  <img src="https://images.weserv.nl/?url=https://img9.doubanio.com/view/subject/l/public/s28261244.jpg" alt="揭秘家用路由器0day漏洞挖掘技术" style="height:250px" />
+    <figcaption>
+      <cite>揭秘家用路由器0day漏洞挖掘技术</cite>
+      <br />
+      <span>
+        <b>作者:</b>王炜</span>
+      <br />
+      <span>
+        <b>出版时间:</b>2015-07</span>
+    </figcaption>
+  </figure>
+</div>
+<h2 id="%E7%94%B5%E5%AD%90%E5%9B%BE%E4%B9%A6%E4%BB%93%E5%BA%93">电子图书仓库</h2>
+<ul>
+<li><a href="https://github.com/apachecn/sec-books-part1">网安类绝版图书 https://github.com/apachecn/sec-books-part1</a></li>
+<li><a href="https://github.com/olist213/Information_Security_Books">信息安全方面的书籍 https://github.com/olist213/Information_Security_Books</a></li>
+</ul>
+
+</body>
+</html>
