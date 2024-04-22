@@ -1,4 +1,4 @@
-# CTF Wiki
+# CTF指南
 
 ## 什么是CTF？
 

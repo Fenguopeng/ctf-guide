@@ -11,10 +11,21 @@
 
 <div class="grid-container">
 
- <figure> 
-   <img src="https://image12.bookschina.com/2023/20231126/1/9176102.jpg" alt="AWD特训营：技术解析、赛题实战与竞赛技巧 " style="height:250px" /> 
+  <figure> 
+   <img src="https://cdn.ptpress.cn/pubcloud/bookImg/A20232208/20240321B35D64AF.jpg" alt="CTF快速上手：PicoCTF真题解析（Web篇）" style="height:250px" /> 
    <figcaption> 
-    <cite>AWD特训营：技术解析、赛题实战与竞赛技巧 </cite>
+    <cite>CTF快速上手：PicoCTF真题解析（Web篇）</cite>
+    <br /> 
+    <span><b>作者:</b>李华峰</span>
+    <br /> 
+    <span><b>出版时间:</b>2024-03</span> 
+   </figcaption> 
+  </figure>
+  
+ <figure> 
+   <img src="https://image12.bookschina.com/2023/20231126/1/9176102.jpg" alt="AWD特训营：技术解析、赛题实战与竞赛技巧" style="height:250px" /> 
+   <figcaption> 
+    <cite>AWD特训营：技术解析、赛题实战与竞赛技巧</cite>
     <br /> 
     <span><b>作者:</b>吴涛、张道全、王玉琪</span>
     <br /> 
