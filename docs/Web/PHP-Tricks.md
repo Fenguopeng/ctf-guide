@@ -1,5 +1,117 @@
 # PHP特性
 
+## 类型转换
+
+PHP是**动态类型**语言，在变量声明时不需要定义类型。
+
+变量类型转换分为`自动类型转换`和`强制类型转换`。
+- `强制类型转换`是通过显式调用进行转换，有两种方法
+  - 通过在值前面的括号中写入类型来将值转换指定的类型，如`$bar = (bool) $foo`。
+  - 使用`settype()`函数。
+- PHP会尝试在某些上下文中自动将值解释为另一种类型，即自动类型转换。
+- [类型转换的判别](https://www.php.net/manual/zh/language.types.type-juggling.php)
+
+### [转换为string](https://www.php.net/manual/zh/language.types.string.php#language.types.string.casting)
+
+- 布尔值`true`转换为"1"
+- 布尔值`false`转换为""（空字符串）
+- 数组`array`总是转换成字符串"Array"
+  - `echo`和`print`无法显示该数组的内容
+  - 在反序列化POP链经常用到
+- 整数、浮点数转换为数字的字面样式的字符串
+- 必须使用魔术方法 `__toString` 才能将 `object` 转换为 `string`
+- `null`总是被转变成空字符串
+
+
+```php
+// 布尔值`true`转换为"1"
+var_dump(strval(true)); //string(1) "1"
+var_dump(strval(false)); //string(0) ""
+var_dump(strval([])); //string(5) "Array"
+var_dump(strval(123)); //string(3) 
+var_dump(strval(123.5)); //"123"string(5) "123.5"
+var_dump(strval(1e2)); //string(3) "100"
+var_dump(strval(null)); // string(0) ""
+```
+
+### [转换为布尔值]()
+
+以下值被认为是`false`
+
+- 布尔值`false`本身
+- 整型值`0`（零）
+- 浮点型值 `0.0`
+- 空字符串 ""，以及字符串 "0"
+- 不包括任何元素的数组
+- 原子类型 NULL（包括尚未赋值的变量）
+- 内部对象的强制转换行为重载为 bool。例如：由不带属性的空元素创建的 SimpleXML 对象。
+
+```php
+<?php
+// bool(false)
+var_dump((bool)false);
+var_dump((bool)0);
+var_dump((bool)0.0);
+var_dump((bool)"");
+var_dump((bool)"0");
+var_dump((bool)[]);
+var_dump((bool)null);
+```
+
+所有其它值都被认为是 true（包括 资源 和 NAN）。
+
+## 类型比较
+
+不同类型的变量在进行松散比较时会进行`自动类型转换`，[比较运算符](https://www.php.net/manual/zh/language.operators.comparison.php)
+
+- [PHP类型比较表](https://www.php.net/manual/zh/types.comparisons.php)
+- 当两个操作对象都是`数字字符串`，或一个是数字另一个是`数字字符串`，就会**自动按照数值**进行比较。
+  - PHP 8.0.0 之前，如果字符串与数字~~或者数字字符串~~进行比较，则在比较前会将字符串转化为数字。
+- 松散比较，先进行类型转换，然后**比较值**
+- 严格比较，**比较类型、值**
+
+- 例题1：
+
+```php
+<?php
+$num = $_GET['num'];
+
+// 条件1 字符串$num 与 数字0 松散比较
+// 条件2 字符串$num 自动类型转换为布尔型，应为 true
+if ($num == 0 && $num) {
+	echo 'flag{**********}';
+}
+
+// ?num=php
+// ?num=0a
+// PHP8以下
+```
+
+- 例题2
+
+```php
+<?php
+$num = $_GET['num'];
+// 条件1 $num 应不是数字字符串
+// 条件2 字符串$num与整数1进行松散比较
+// PHP8以下，前导数字字符串 ?num=1a
+if (!is_numeric($num) && $num == 1) {
+	echo 'flag{**********}';
+}
+
+// PHP8以下，前导数字字符串 ?num=1235a
+if (!is_numeric($num) && $num > 1234) {
+  echo 'flag{**********}';
+}
+
+// $num 字符串长度最大为3，最大为999
+// 算术操作加法，$num 字符串转换为数字
+// 科学计数法 ?num=1e9
+if (strlen($num) < 4 && intval($num + 1) > 5000)) {
+	echo 'flag{**********}';
+}
+```
+
 ## 重要函数
 
 |函数名称|作用|特性|
@@ -162,3 +274,96 @@ if(is_php($input) === 0) {
 [PHP正则表达式文档](https://www.php.net/manual/zh/book.pcre.php)
 
 https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html
+
+## 经典赛题分析
+
+### 2021-强网杯-寻宝
+
+```php
+<?php
+header('Content-type:text/html;charset=utf-8');
+error_reporting(0);
+highlight_file(__file__);
+
+// 过滤函数，将黑名单字符替换为空
+function filter($string)
+{
+    $filter_word = array('php', 'flag', 'index', 'KeY1lhv', 'source', 'key', 'eval', 'echo', '\$', '\(', '\.', 'num', 'html', '\/', '\,', '\'', '0000000');
+    $filter_phrase = '/' . implode('|', $filter_word) . '/';
+    return preg_replace($filter_phrase, '', $string);
+}
+
+if ($ppp) {
+    unset($ppp);
+}
+$ppp['number1'] = "1";
+$ppp['number2'] = "1";
+$ppp['nunber3'] = "1";
+$ppp['number4'] = '1';
+$ppp['number5'] = '1';
+
+// 变量覆盖漏洞
+extract($_POST);
+
+$num1 = filter($ppp['number1']);
+$num2 = filter($ppp['number2']);
+$num3 = filter($ppp['number3']);
+$num4 = filter($ppp['number4']);
+$num5 = filter($ppp['number5']);
+
+// $num1不能为数字字符串
+if (isset($num1) && is_numeric($num1)) {
+    die("非数字");
+} else {
+	// 前导数字字符串，松散比较，num1=1025a
+    if ($num1 > 1024) {
+        echo "第一层";
+		// 科学计数法，$num2=5e5
+        if (isset($num2) && strlen($num2) <= 4 && intval($num2 + 1) > 500000) {
+            echo "第二层";
+			// md5截断碰撞，$num3=61823470
+            if (isset($num3) && '4bf21cd' === substr(md5($num3), 0, 7)) {
+                echo "第三层";
+				// 前导数字字符串0或纯字母字母串，$num4=aaaaaaa
+                if (!($num4 < 0) && ($num4 == 0) && ($num4 <= 0) && (strlen($num4) > 6) && (strlen($num4) < 8) && isset($num4)) {
+                    echo "第四层";
+                    if (!isset($num5) || (strlen($num5) == 0)) die("no");
+					// json_decode返回值，通过恰当的 PHP 类型返回在 json 中编码的数据。值 true、false 和 null 会相应地返回 true、false 和 null。如果 json 无法被解码，或者编码数据深度超过了嵌套限制的话，将会返回 null 。
+					// 1. $num5=null 2. $num5=a
+                    $b = json_decode(@$num5);
+                    if ($y = $b === NULL) {
+                        if ($y === true) {
+                            echo "第五层";
+                            include 'flag.php';
+                            echo $flag;
+                        }
+                    } else {
+                        die("no");
+                    }
+                } else {
+                    die("no");
+                }
+            } else {
+                die("no");
+            }
+        } else {
+            die("no");
+        }
+    } else {
+        die("no111");
+    }
+}
+```
+
+EXP:
+
+```php
+?ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=0aaaaaa&ppp[number5]=a
+或
+?ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=abcdefg&ppp[number5]=null
+```
+
+
+### 2022-ISCC-冬奥会
+
+### 
