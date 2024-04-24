@@ -135,6 +135,20 @@ PHP 中的变量用一个美元符号后面跟变量名来表示。变量名是*
 
 !> 在此所说的字母是 a-z，A-Z，以及 ASCII 字符从 128 到 255（0x80-0xff）
 
+### [超全局变量](https://www.php.net/manual/zh/language.variables.superglobals.php)
+
+超全局变量是指在全部作用域中始终可用的内置变量。
+
+#### [$_GET](https://www.php.net/manual/zh/reserved.variables.get.php)
+
+通过 URL 参数（又叫 query string）传递给当前脚本的变量的**数组**。
+
+- GET 是通过 **urldecode()** 传递的。
+  - URL解码[urldecode()](https://www.php.net/manual/zh/function.urldecode.php) 加号（'+'）被解码成一个空格字符。
+- 若URL中的查询字符串`?arg=a`，则`$_GET['arg']`为字符串类型；若URL中的查询字符串`?arg[]=a`，则`$_GET['arg']`为数组类型。
+- 该数组不仅仅对 method 为 GET 的请求生效，而是会针对**所有带 query string 的请求**。
+
+#### [$_POST](https://www.php.net/manual/zh/reserved.variables.post.php)
 ## 常量
 
 可以使用 const 关键字或 define() 函数两种方法来定义一个常量。一个常量一旦被定义，就不能再改变或者取消定义。常量前面没有美元符号（$）；
@@ -164,6 +178,33 @@ echo CONSTANT;
 
 ### 匿名类
 
-```php
+PHP7现在支持通过 new class 来实例化匿名类，这可以用来替代一些“用后即焚”的完整类定义。匿名类很有用，可以创建一次性的简单对象。匿名类的名称是通过引擎赋予的。匿名类的名称在不同版本存在差异。
 
+```php
+<?php
+echo get_class(new class() {} );
+// PHP 7.4 
+// class@anonymous%00/var/www/html/index.php:2$1
+
+// PHP 7.[0123]
+// class@anonymous%00/var/www/html/index.php0x7fb985e59023
+```
+
+在PHP 7.4中，匿名类的名称与之前版本有所不同，`class@anonymous%00/var/www/html/index.php:2$1`，包含有脚本名称、匿名类所在的行号`:2`、序号`$1`。在实际测试中发现，每次会话其序号从`$0`递增。
+
+我们可以用过引用匿名类的名称实例化。
+
+```php
+<?php
+$a = new class {
+    function getflag() {
+        echo "flag{}";
+    }
+};
+
+$b = $_GET['b'];
+$c = new $b();
+$c->getflag();
+
+// ?b=class@anonymous%00/var/www/html/1.php:2$0
 ```

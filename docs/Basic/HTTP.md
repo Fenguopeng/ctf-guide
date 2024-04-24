@@ -69,6 +69,10 @@ HTTP响应状态码用来表示一个HTTP请求是否成功完成。响应被分
 
 ## 抓包改包
 
+请求头
+- X-Forwarded-For
+- X-Real-IP
+- User-Agent
 ## 参考资料
 
 1. 阮一峰，[HTTP 协议入门](https://www.ruanyifeng.com/blog/2016/08/http.html)
