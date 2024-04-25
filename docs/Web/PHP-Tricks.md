@@ -171,10 +171,15 @@ if ($str1 !== $str2) if (md5($salt.$str1) === md5($salt.$str2)) die($flag);
 
 - [不同的数值构建一样的MD5](https://xz.aliyun.com/t/2232)
 
+
+
 ```php
 // 原字符串不全等，md5值全等
 if ((string)$str1 !== (string)$str2) if (md5($str1) === md5($str2)) die($flag);
 ```
+
+主要利用[HashClash](https://www.win.tue.nl/hashclash/)，[fastcoll_v1.0.0.5.exe](https://www.win.tue.nl/hashclash/fastcoll_v1.0.0.5.exe.zip)的使用方法如下：
+
 
 - 字符串的MD5值等于其本身
 
@@ -365,5 +370,135 @@ EXP:
 
 
 ### 2022-ISCC-冬奥会
+
+```php
+<?php
+function MyHashCode($str) {
+	$h = 0;
+	$len = strlen($str);
+	for ($i = 0; $i < $len; $i++) {
+		$hash = intval40(intval40(40 * $hash) + ord($str[$i]));
+	}
+	return abs($hash);
+}
+
+function intval40($code) {
+	// 位运算符，$code 向右移动32位
+	$falg = $code >> 32;
+	// $code向右移动32位后，若等于1
+	// $code 范围在 2的32次方---2的33次方-1
+	if ($falg == 1) {
+		// 位运算符，取反
+		$code = ~($code - 1);
+		return $code * -1;
+	} else {
+		// $code向右移动32位后，不等于1
+		return $code;
+	}
+}
+function Checked($str) {
+	$p1 = '/ISCC/';
+	if (preg_match($p1, $str)) {
+		return false;
+	}
+	return true;
+}
+
+function SecurityCheck($sha1, $sha2, $user) {
+
+	$p1 = '/^[a-z]+$/';
+	$p2 = '/^[A-Z]+$/';
+
+	if (preg_match($p1, $sha1) && preg_match($p2, $sha2)) {
+		$sha1 = strtoupper($sha1);
+		$sha2 = strtolower($sha2);
+		$user = strtoupper($user);
+		$crypto = $sha1 ^ $sha2;
+	} else {
+		die("wrong");
+	}
+
+	return array($crypto, $user);
+}
+error_reporting(0);
+
+$user = $_GET['username']; //user
+$sha1 = $_GET['sha1']; //sha1
+
+// 注意 颜色区别，需要获取真正的参数
+$sha2 = $_GET['‮⁦//sha2⁩⁦sha2'];
+//‮⁦see me ⁩⁦can you
+
+if (isset($_GET['password'])) {
+	if ($_GET['password2'] == 5) {
+		show_source(__FILE__);
+	} else {
+		//Try to encrypt
+		if (isset($sha1) && isset($sha2) && isset($user)) {
+			[
+				$crypto,
+				$user
+			] = SecurityCheck($sha1, $sha2, $user);
+            // 哈希函数的截断碰撞
+            // 设 $crypto === $user
+			if ((substr(sha1($crypto), -6, 6) === substr(sha1($user), -6, 6)) && (substr(sha1($user), -6, 6)) === 'a05c53') {
+				//welcome to ISCC
+
+                // $_GET['password'] 不能包含 ISCC
+				if ((MyHashcode("ISCCNOTHARD") === MyHashcode($_GET['password'])) && Checked($_GET['password'])) {
+					include("f1ag.php");
+					echo $flag;
+				} else {
+					die("就快解开了!");
+				}
+			} else {
+				die("真的想不起来密码了吗?");
+			}
+		} else {
+			die("密钥错误!");
+		}
+	}
+}
+
+mt_srand((microtime() ^ rand(1, 10000)) % rand(1, 1e4) + rand(1, 1e4));
+?>
+```
+
+
+1. `$_GET['username']`哈希函数的截断碰撞，`username=14987637`
+```php
+for($i;;$i++) if(substr(sha1($i), -6, 6) == "a05c53") die("$i");
+// 14987637
+```
+
+2. 取`$sha1='AAAAAAAA'`，得`$sha2=puxyvwrv`
+```php
+echo '14987637' ^ 'AAAAAAAA'; // puxyvwrv
+```
+
+3. 调试代码
+
+```
+73  73
+83  3003
+67  120187
+67  4807547
+78  192301958
+yesyes79  7692078399
+84  307683136044
+72  12307325441832
+65  492293017673345
+82  19691720706933882
+68  787668828277355348
+787668828277355348
+```
+
+观察发现，在`intval40`参数值范围在 $2^{32}$~$2^{33}-1$，满足条件`$falg == 1`，其余情况，原样返回。我们只需破坏`ISCC`关键词，依然包含上方的流程，`%01%43SCCNOTHARD`
+
+EXP:
+
+```
+?username=14987637&password=%01!SCCNOTHARD&%E2%80%AE%E2%81%A6//sha2%E2%81%A9%E2%81%A6sha2=AAAAAAAA&sha1=puxyvwrv
+```
 
 ### 
