@@ -102,16 +102,17 @@ PHP 中的变量用一个美元符号后面跟变量名来表示。变量名是*
 
 超全局变量是指在全部作用域中始终可用的内置变量。
 
-#### [$_GET](https://www.php.net/manual/zh/reserved.variables.get.php)
+#### [$_GET](https://www.php.net/manual/zh/reserved.variables.get.php)、[$_POST](https://www.php.net/manual/zh/reserved.variables.post.php)
 
-通过 URL 参数（又叫 query string）传递给当前脚本的变量的**数组**。
+`$_GET`通过 URL 参数（又叫 query string）传递给当前脚本的变量的**数组**。
 
-- GET 是通过 **urldecode()** 传递的。
+- `$_GET`、 `$_POST`是通过 **urldecode()** 传递的，`urldecode($_POST['id'])`，可通过双重URL编码绕过。
   - URL解码[urldecode()](https://www.php.net/manual/zh/function.urldecode.php) 加号（'+'）被解码成一个空格字符。
-- 若URL中的查询字符串`?arg=a`，则`$_GET['arg']`为字符串类型；若URL中的查询字符串`?arg[]=a`，则`$_GET['arg']`为数组类型。
-- 该数组不仅仅对 method 为 GET 的请求生效，而是会针对**所有带 query string 的请求**。
+- 若URL中的查询字符串`?arg=a`，则`$_GET['arg']`为字符串类型；若URL中的查询字符串`?arg[a]=a`，则`$_GET['arg']`为数组类型。
+  - `?arg[]=a&arg[]=b`，不指定key，自动索引递增
+  - `?arg[name]=a&arg[name2]=b`，指定数组key，**不需要加引号**
+- `$_GET`，该数组不仅仅对 method 为 GET 的请求生效，而是会针对**所有带 query string 的请求**。
 
-#### [$_POST](https://www.php.net/manual/zh/reserved.variables.post.php)
 ## 常量
 
 可以使用 const 关键字或 define() 函数两种方法来定义一个常量。一个常量一旦被定义，就不能再改变或者取消定义。常量前面没有美元符号（$）；

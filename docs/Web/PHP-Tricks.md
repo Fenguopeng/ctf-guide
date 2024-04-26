@@ -122,6 +122,34 @@ if (strlen($num) < 4 && intval($num + 1) > 5000)) {
 |[preg_match()](https://www.php.net/manual/zh/function.preg-match.php)|执行匹配正则表达式|1.数组返回false <br /> 2. 换行 <br /> 3. 回溯次数限制绕过|
 |[in_array()](https://www.php.net/manual/zh/function.in-array.php)、[array_search()](https://www.php.net/manual/zh/function.array-search.php)|检查数组中是否存在某个值|如果没有设置strict，则使用松散比较
 |[chr()](https://www.php.net/manual/zh/function.chr.php)|返回指定的字符|1. 如果数字大于256，返回`mod 256`|
+|json_decode()||1. 字符串null、不符合json格式的情况返回null|
+
+- json_decode()
+
+```php
+var_dump(json_decode('1')); // int(1)
+var_dump(json_decode('false')); // bool(false)
+var_dump(json_decode('true')); // bool(true)
+var_dump(json_decode('null')); // NULL
+var_dump(json_decode('a')); // NULL
+
+// key 必须双引号 value 加双引号是字符串，不加是数字
+var_dump((array)json_decode('{"key":"value", "2":2,"3":"3"}'));
+
+/*
+ array(3) {
+  ["key"]=>
+  string(5) "value"
+  [2]=>
+  int(2)
+  [3]=>
+  string(1) "3"
+}
+ */
+
+// 嵌套数组
+var_dump((array)json_decode('{"a":[1,[2,3],4]}'));
+```
 
 ## 变量覆盖漏洞
 
@@ -149,8 +177,7 @@ if (strlen($num) < 4 && intval($num + 1) > 5000)) {
 
 计算字符串的散列值[md5()](https://www.php.net/manual/zh/function.md5)、[sha1()](https://www.php.net/manual/zh/function.sha1.php)
 
-- 哈希值为`0e`开头的字符串 - `md5('240610708') == md5('QNKCDZO')`
-
+### `0e`开头
 
 ```php
 <?php
@@ -158,7 +185,12 @@ if (strlen($num) < 4 && intval($num + 1) > 5000)) {
 if ($str1 != $str2) if (md5($str1) == md5($str2)) die($flag);
 ```
 
-- 数组绕过 - `md5(array)`，如果参数类型为数组，返回`NULL`
+```
+md5('240610708') == md5('QNKCDZO')
+```
+### 数组绕过
+
+`md5(array)`，如果参数类型为数组，返回`NULL`
 
 ```php
 <?php
@@ -169,22 +201,44 @@ if ($str1 !== $str2) if (md5($salt.$str1) === md5($salt.$str2)) die($flag);
 // ?a[]=..&b[]=...
 ```
 
-- [不同的数值构建一样的MD5](https://xz.aliyun.com/t/2232)
-
-
+### [不同的数值构建一样的MD5]()
 
 ```php
 // 原字符串不全等，md5值全等
 if ((string)$str1 !== (string)$str2) if (md5($str1) === md5($str2)) die($flag);
 ```
 
-主要利用[HashClash](https://www.win.tue.nl/hashclash/)，[fastcoll_v1.0.0.5.exe](https://www.win.tue.nl/hashclash/fastcoll_v1.0.0.5.exe.zip)的使用方法如下：
+- 选择前缀碰撞
+- 相同前缀碰撞，在两个不同的文件中共享相同的前缀和后缀，但中间的二进制不同。
+[HashClash](https://www.win.tue.nl/hashclash/) 是一个用于 MD5 和 SHA-1 密码分析的工具箱，由 cr-marcstevens 开发。它可以用于创建不同类型的碰撞，包括选择前缀碰撞和相同前缀碰撞。
+使用已编译好的Win32工具[fastcoll_v1.0.0.5.exe](https://www.win.tue.nl/hashclash/fastcoll_v1.0.0.5.exe.zip)可以在几秒内完成任务，过程如下：
 
+```shell
+# -p pre.txt 为前缀文件 -o 输出两个md5一样的文件
+.\fastcoll_v1.0.0.5.exe -p pre.txt -o msg1.bin msg2.bin
+```
 
-- 字符串的MD5值等于其本身
+生成的两个不同的文件，便于发送，进行URL编码
 
 ```php
-$str == md5($str)
+<?php
+echo "msg1:" . urlencode(file_get_contents("msg1.bin")) . PHP_EOL;
+echo "msg2:" . urlencode(file_get_contents("msg2.bin")) . PHP_EOL;
+
+/*
+msg1:yes%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%C3%DF%00W%ABi%1BR%EF%F5%FC%22%F6%E9%F8%F2%03%21%AF4v%3A%9B%E6W%B6A%95H%B8D%07%A9%DB%CC%DE%BC%E3%A2%1A%87%BAg%DB%DC%DB1%B4%9Da%5D%E8%E4%D0%D4%F4%EC%00%96c%A2%8B%1E%18%16%0AvrJ%E7%98%96X1%27I%D2%CE%28%1E%9Avb4%1C%EA%00%3D%24%5D%A4e%CF%EB-%EE%D1%27%7FX%98%9A%B1%C8bJ%09j%85%7C%AE%5C%12%7D%26%F3Y%BF%23%18%81%96%D1%FF%B8%E7Z%8B
+
+msg2:yes%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%C3%DF%00W%ABi%1BR%EF%F5%FC%22%F6%E9%F8%F2%03%21%AF%B4v%3A%9B%E6W%B6A%95H%B8D%07%A9%DB%CC%DE%BC%E3%A2%1A%87%BAg%DB%DC%5B2%B4%9Da%5D%E8%E4%D0%D4%F4%EC%00%96%E3%A2%8B%1E%18%16%0AvrJ%E7%98%96X1%27I%D2%CE%28%1E%9Avb%B4%1C%EA%00%3D%24%5D%A4e%CF%EB-%EE%D1%27%7FX%98%9A%B1%C8bJ%09j%85%FC%AD%5C%12%7D%26%F3Y%BF%23%18%81%96%D1%7F%B8%E7Z%8B
+*/
+```
+
+- [Project HashClash - MD5 & SHA-1 cryptanalytic toolbox](https://github.com/cr-marcstevens/hashclash)
+- [GitHub - corkami/collisions: Hash collisions and exploitations](https://github.com/corkami/collisions)
+
+### 字符串的MD5值等于其本身
+
+```php
+if($str == md5($str)) die($flag);
 ```
 
 寻找一个`0e`开头的字符串，且其md5值也是`0e`开头。
@@ -195,10 +249,12 @@ for($i;;$i++) if("0e{$i}" == md5("0e{$i}")) die("0e{$i}");
 # 输出 0e215962017
 ```
 
-- 截断比较，字符串的md5的指定长度等于某个数
+### 截断比较
+
+哈希字符串的指定位置等于某字符串
 
 ```php
-substr(md5($str), 0, 6) == "******"
+if(substr(md5($str), 0, 6) == "******") die($flag);
 ```
 
 采用暴力碰撞方式
@@ -363,13 +419,59 @@ if (isset($num1) && is_numeric($num1)) {
 EXP:
 
 ```php
-?ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=0aaaaaa&ppp[number5]=a
+ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=0aaaaaa&ppp[number5]=a
 或
-?ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=abcdefg&ppp[number5]=null
+ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=abcdefg&ppp[number5]=null
 ```
 
 
 ### 2022-ISCC-冬奥会
+
+```php
+<?php
+
+show_source(__FILE__);
+
+$Step1 = False;
+$Step2 = False;
+
+$info = (array)json_decode(@$_GET["Information"]);
+
+if (is_array($info)) {
+
+	var_dump($info);
+    //  不能是数字或数字字符串
+	is_numeric(@$info["year"]) ? die("Sorry~") : NULL;
+	if (@$info["year"]) {
+        // 字符串与数字松散比较，前导数字字符串 $info["year"]='2022a'
+		($info["year"] == 2022) ? $Step1 = True : NULL;
+	}
+    // $info["items"]必须是数组
+	if (is_array(@$info["items"])) {
+        // $info["items"][1] 是数组
+        // $info["items"]数组元素数量=3
+		if (!is_array($info["items"][1]) or count($info["items"]) !== 3) die("Sorry~");
+		// array_search() 松散比较，0 == "skiing"
+        $status = array_search("skiing", $info["items"]);
+		$status === false ? die("Sorry~") : NULL;
+		foreach ($info["items"] as $key => $val) {
+			$val === "skiing" ? die("Sorry~") : NULL;
+		}
+		$Step2 = True;
+	}
+}
+
+if ($Step1 && $Step2) {
+	include "2022flag.php";
+	echo $flag;
+}
+```
+
+```
+?Information={"year":"2022a","items":["a",[],0]}
+```
+
+### 2023-ISCC-小周的密码锁
 
 ```php
 <?php
@@ -500,5 +602,3 @@ EXP:
 ```
 ?username=14987637&password=%01!SCCNOTHARD&%E2%80%AE%E2%81%A6//sha2%E2%81%A9%E2%81%A6sha2=AAAAAAAA&sha1=puxyvwrv
 ```
-
-### 
