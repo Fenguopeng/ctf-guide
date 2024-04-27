@@ -1,3 +1,6 @@
-- [VMware虚拟机的使用](Basic/虚拟机的使用.md)
 - [网站工作原理](Basic/)
 - [HTTP协议](Basic/HTTP.md)
+- **工具安装配置**
+- [VMware虚拟机的使用](Basic/虚拟机的使用.md)
+- [Burp Suite Pro的安装与激活](Basic/burp.md)
+- [010Editor](Basic/010Editor.md)
