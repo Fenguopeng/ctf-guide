@@ -1,8 +1,7 @@
 - **基础**
-- [网站工作原理]()
-- [信息泄露]()
 - [PHP语法基础](Web/PHP.md)
 - [PHP特性（PHP Tricks）](Web/PHP-Tricks.md)
+- [信息泄露]()
 - [目录遍历（Directory Traversal）](Web/directory-traversal.md)
 - [代码注入](Web/code-injection.md)
 - [命令注入](Web/command-injection.md)

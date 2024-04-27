@@ -1,6 +1,8 @@
 # Burp Suite Pro的安装与激活
 
-[Burp Suite](https://portswigger.net/burp)是一款由英国PortSwigger公司开发，使用最广泛的Web应用安全测试软件。目前发行版本有专业版、社区版和企业版。我们选择使用专业版。以下简称`burp`。
+[Burp Suite](https://portswigger.net/burp)是一款由英国PortSwigger公司开发，使用最广泛的Web应用安全测试软件。目前发行版本有专业版、社区版和企业版。圈内人士常将其简称为`burp`、`bp`。
+
+?>Burp Suite 的发音为 `/bɜːrp swiːt/`，"Suite"的发音类似于"sweet"，中文翻译为`套件`。
 
 - Bilibili video
 - aid=1053570015&bvid=BV1bH4y1A7SG&cid=1522261095&p=1

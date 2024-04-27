@@ -1,6 +1,25 @@
+- **原理**
 - [网站工作原理](Basic/)
 - [HTTP协议](Basic/HTTP.md)
-- **工具安装配置**
-- [VMware虚拟机的使用](Basic/虚拟机的使用.md)
+- **常用工具**
+- [VMware虚拟机的安装与使用方法](Basic/vmware.md)
+- [010Editor的安装与激活](Basic/010Editor.md)
+- [Chrome浏览器的插件推荐](Basic/chrome)
+- [安装Docker]()
+- **PHP Web环境**
+- [搭建LAMP环境](Basic/LAMP.md)
+- [搭建WAMP环境](Basic/WAMP.md)
+- [VS Code配合Docker的使用](Basic/Docker.md)
+- **漏洞靶场环境**
+- [搭建DVWA](Basic/DVWA.md)
+- [搭建upload-labs](Basic/upload-labs.md)
+- [搭建SQLi-Labs](Basic/SQLi-Labs.md)
+- [搭建XSS测试平台](Basic/)
+- **Burp Suite**
 - [Burp Suite Pro的安装与激活](Basic/burp.md)
-- [010Editor](Basic/010Editor.md)
+- [Chrome与Burp Suite配合使用](Basic/burp-chrome.md)
+- [Burp Suite的主要功能介绍](Basic/burp-chrome.md)
+- **sqlmap**
+- **Nmap**
+- **Java Web环境**
+- **Python Web环境**
