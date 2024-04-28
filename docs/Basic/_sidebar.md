@@ -1,5 +1,5 @@
 - **原理**
-- [网站工作原理](Basic/)
+- [网站工作原理](Basic/how_the_Web_works.md)
 - [HTTP协议](Basic/HTTP.md)
 - **常用工具**
 - [VMware虚拟机的安装与使用方法](Basic/vmware.md)
