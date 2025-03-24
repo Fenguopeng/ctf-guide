@@ -6,6 +6,8 @@
 - [010Editor的安装与激活](Basic/010Editor.md)
 - [Chrome浏览器的插件推荐](Basic/chrome)
 - [安装Docker]()
+- **Linux**
+- [Bash基础](Basic/Linux/Bash.md)
 - **PHP Web环境**
 - [搭建LAMP环境](Basic/LAMP.md)
 - [搭建WAMP环境](Basic/WAMP.md)
@@ -16,9 +18,10 @@
 - [搭建SQLi-Labs](Basic/SQLi-Labs.md)
 - [搭建XSS测试平台](Basic/)
 - **Burp Suite**
-- [Burp Suite Pro的安装与激活](Basic/burp.md)
+- [Burp Suite Pro的安装与激活](Basic/burp/burp.md)
 - [Chrome与Burp Suite配合使用](Basic/burp-chrome.md)
 - [Burp Suite的主要功能介绍](Basic/burp-chrome.md)
+- [Burp Suite Intruder]()
 - **sqlmap**
 - **Nmap**
 - **Java Web环境**

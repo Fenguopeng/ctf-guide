@@ -18,6 +18,10 @@ sudo apt install apache2 -y
 
 ## 安装PHP
 
+PHP与Apache协同工作，PHP有两种安装模式，第一个是PHP嵌入到服务器端软件（如Apache）作为一个模块安装。
+
+第二个是以CGI（Common Gateway Interface，公共网关接口）的模式安装，CGI是外部扩展应用程序与Web服务器交互的一个标准接口。
+
 ```bash
 sudo apt install php libapache2-mod-php php-mysql -y
 ```

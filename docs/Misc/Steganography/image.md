@@ -1,6 +1,10 @@
 # 图片隐写
 
-## BMP
+## BMP（位图）
+
+[BMP](https://zh.wikipedia.org/wiki/BMP)是一种独立于显示器的位图数字图像文件格式，**通常不压缩**，体积大，不适合在因特网上传输。
+
+![](https://upload.wikimedia.org/wikipedia/commons/7/75/BMPfileFormat.svg)
 ## PNG
 
 ### 修改高度

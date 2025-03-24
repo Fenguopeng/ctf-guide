@@ -1,8 +1,10 @@
 # PHP语法基础
 
-PHP作为“世界上最好的语言”，是目前CTF Web题目中的考查热点。
+PHP 是一种广泛应用的通用脚本语言，特别适合用于网页开发，其代码可嵌入到HTML中。它快速、灵活且实用，易于学习和使用。
 
-当前主流版本有`5.[56].x`、`7.[01234].x`和`8.[0123].x`。
+PHP作为`世界上最好的语言`，是CTF Web题目中的考查热点。
+
+历史主流版本有`5.[56].x`、`7.[01234].x`和`8.[01234].x`。
 
 在命令行模式下运行PHP代码的方法如下：
 
@@ -17,10 +19,10 @@ php -r <code>
 php -f scriptname.php
 ```
 
-此外，强烈推荐[PHP在线平台](https://onlinephp.io/)，支持多种PHP版本。
-
+?> **强烈推荐**使用在线PHP代码测试编辑器[onlinephp.io](https://onlinephp.io/)，该工具提供多种PHP版本的选择。
 
 ## 基本语法
+
 ### 标记
 
 开始标记、结束标记
@@ -39,9 +41,9 @@ php -f scriptname.php
 
 ### 指令分隔符
 
-PHP需要在每个语句后用`分号`结束指令，一段 PHP 代码中的结束标记隐含表示了一个分号；在一个 PHP 代码段中的最后一行可以不用分号结束。
+PHP每个语句后需用`分号`结束指令，结束标记隐含表示了一个分号，代码段的最后一行可以不加分号。
 
-文件末尾的 PHP 代码段结束标记可以不要，有些情况下当使用 include 或者 require 时省略掉会更好些，这样不期望的空白符就不会出现在文件末尾，之后仍然可以输出响应标头。
+在文件末尾，PHP 代码段的结束标记可以省略，尤其在使用 include 或者 require 时，这样可以避免不必要的空白符出现。
 
 ## 类型
 
@@ -90,19 +92,17 @@ PHP的代码高亮函数，其颜色显示是根据`php.ini`定义显示，注�
 
 ## [变量](https://www.php.net/manual/zh/language.variables.basics.php)
 
-PHP 中的变量用一个美元符号后面跟变量名来表示。变量名是**区分大小写**的。
+PHP 中的变量以美元符号`$`开头，后接变量名，且变量名**区分大小写**。
 
-变量名与 PHP 中其它的标签一样遵循相同的规则。一个有效的变量名由字母或者下划线开头，后面跟上任意数量的字母，数字，或者下划线。正则表达式为`^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$`。
+有效的变量名必须以**字母**或下划线开头，后面可以跟上任意数量的字母，数字或下划线。其正则表达式为`^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*$`。
 
-!> 在此所说的字母是 a-z，A-Z，以及 ASCII 字符从 128 到 255（0x80-0xff）。通过正则发现，变量名支持unicode、中文，如`$你好`
-
+!> 所指的字母包括 `a-z`，`A-Z`，以及 ASCII 字符从 128 到 255（0x80-0xff）。正则表达式显示，变量名支持Unicode、中文，例如`$你好`
 
 ### [超全局变量](https://www.php.net/manual/zh/language.variables.superglobals.php)
 
-
 超全局变量是指在全部作用域中始终可用的内置变量。
 
-#### [$_GET](https://www.php.net/manual/zh/reserved.variables.get.php)、[$_POST](https://www.php.net/manual/zh/reserved.variables.post.php)
+#### [\$_GET](https://www.php.net/manual/zh/reserved.variables.get.php)、[$_POST](https://www.php.net/manual/zh/reserved.variables.post.php)
 
 `$_GET`通过 URL 参数（又叫 query string）传递给当前脚本的变量的**数组**。
 

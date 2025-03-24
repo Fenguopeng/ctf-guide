@@ -2,14 +2,41 @@
 
 ## 类型转换
 
-PHP是**动态类型**语言，在变量声明时不需要定义类型。
+PHP是**动态类型**语言，声明变量时不需要定义类型。
 
 变量类型转换分为`自动类型转换`和`强制类型转换`。
-- `强制类型转换`是通过显式调用进行转换，有两种方法
-  - 通过在值前面的括号中写入类型来将值转换指定的类型，如`$bar = (bool) $foo`。
-  - 使用`settype()`函数。
-- PHP会尝试在某些上下文中自动将值解释为另一种类型，即自动类型转换。
+
+`强制类型转换`是通过显式调用进行转换，有两种方法
+
+- 通过在值前面的括号中写入类型来将值转换指定的类型，如`$bar = (bool) $foo`。
+- 使用`settype()`函数。
+
+PHP会尝试在某些上下文中自动将值解释为另一种类型，即自动类型转换。
+
 - [类型转换的判别](https://www.php.net/manual/zh/language.types.type-juggling.php)
+
+### [转换为整型](https://www.php.net/manual/zh/language.types.integer.php#language.types.integer.casting)
+
+```php
+<?php
+var_dump(intval(false)); // int(0)
+var_dump(intval(true)); // int(1)
+
+var_dump(intval("NULL")); // int(0)
+
+var_dump(intval("123")); // int(123)
+var_dump(intval("0a")); // int(0)
+var_dump(intval("123a")); // int(123)
+var_dump(intval("php")); // int(0)
+
+// PHP 7.1.0，科学计数法
+var_dump(intval("1e1")); // int(1)，从PHP 7.1.0 开始，int(10)
+
+// PHP 8.0.0 之后
+var_dump(intval(NAN)); // int(0)
+var_dump(intval(INF)); // int(0)
+var_dump(intval(-INF)); // int(0)
+```
 
 ### [转换为string](https://www.php.net/manual/zh/language.types.string.php#language.types.string.casting)
 
@@ -22,7 +49,6 @@ PHP是**动态类型**语言，在变量声明时不需要定义类型。
 - 必须使用魔术方法 `__toString` 才能将 `object` 转换为 `string`
 - `null`总是被转变成空字符串
 
-
 ```php
 // 布尔值`true`转换为"1"
 var_dump(strval(true)); //string(1) "1"
@@ -34,9 +60,9 @@ var_dump(strval(1e2)); //string(3) "100"
 var_dump(strval(null)); // string(0) ""
 ```
 
-### [转换为布尔值]()
+### [转换为布尔值](https://www.php.net/manual/zh/language.types.boolean.php#language.types.boolean.casting)
 
-以下值被认为是`false`
+当转换为`bool`时，以下值被认为是`false`：
 
 - 布尔值`false`本身
 - 整型值`0`（零）
@@ -65,51 +91,61 @@ var_dump((bool)null);
 不同类型的变量在进行松散比较时会进行`自动类型转换`，[比较运算符](https://www.php.net/manual/zh/language.operators.comparison.php)
 
 - [PHP类型比较表](https://www.php.net/manual/zh/types.comparisons.php)
-- 当两个操作对象都是`数字字符串`，或一个是数字另一个是`数字字符串`，就会**自动按照数值**进行比较。
-  - PHP 8.0.0 之前，如果字符串与数字~~或者数字字符串~~进行比较，则在比较前会将字符串转化为数字。
-- 松散比较，先进行类型转换，然后**比较值**
-- 严格比较，**比较类型、值**
 
-- 例题1：
+- 当两个操作对象都是`数字字符串`，或一个是数字另一个是`数字字符串`，就会**自动按照数值**进行比较。此规则也适用于`switch`语句。当比较时用的是 `===` 或 `!==`， 则不会进行类型转换——因为不仅要对比数值，还要对比类型。
+
+!> PHP 8.0.0 之前，如果字符串与数字~~或数字字符串~~进行比较，则在比较前会将字符串转换为数字。
 
 ```php
 <?php
-$num = $_GET['num'];
+var_dump("0" == 0); // bool(true)
+var_dump("123" == 123); // bool(true)
+var_dump("1e1" == 1e1); // bool(true)
 
-// 条件1 字符串$num 与 数字0 松散比较
-// 条件2 字符串$num 自动类型转换为布尔型，应为 true
-if ($num == 0 && $num) {
-	echo 'flag{**********}';
-}
+var_dump("0a" == 0); // bool(true)
+var_dump("php" == 0); // bool(true)
 
-// ?num=php
-// ?num=0a
-// PHP8以下
+// PHP 8.0.0 之后
+var_dump("0a" == 0); // bool(false)
+var_dump("php" == 0); // bool(false)
 ```
 
-- 例题2
+### 例题分析
+
+#### 例题1
 
 ```php
 <?php
 $num = $_GET['num'];
-// 条件1 $num 应不是数字字符串
-// 条件2 字符串$num与整数1进行松散比较
-// PHP8以下，前导数字字符串 ?num=1a
-if (!is_numeric($num) && $num == 1) {
-	echo 'flag{**********}';
-}
 
-// PHP8以下，前导数字字符串 ?num=1235a
-if (!is_numeric($num) && $num > 1234) {
-  echo 'flag{**********}';
+if ($num == 0 && $num) {
+    echo 'flag{**********}';
 }
+```
 
-// $num 字符串长度最大为3，最大为999
-// 算术操作加法，$num 字符串转换为数字
-// 科学计数法 ?num=1e9
-if (strlen($num) < 4 && intval($num + 1) > 5000)) {
-	echo 'flag{**********}';
+当条件1`$num == 0`和条件2`$num`均为`bool(true)`时，得到`flag`。
+
+- 条件1，字符串`$num`等于整数`0`，松散比较。字符串`$num`转换为整型，要求值为整型`0`，可为数字字符串"0"、前导数字字符串(如"0a")、非 numeric 或者前导数字（即纯字符，如"php"）。
+- 条件2，字符串`$num`转换为布尔型。要求值为布尔型`true`,则**不能为空字符串 ""及字符串 "0"**
+
+```bash
+// ?num=0a
+// ?num=php
+// PHP 8以下
+```
+
+#### 例题2
+
+```php
+<?php
+$a = $_GET['a'];
+if ($a == 0 && $a == "admin") {
+    echo 'flag{**********}';
 }
+```
+
+```bash
+?a=admin
 ```
 
 ## 重要函数
@@ -117,7 +153,7 @@ if (strlen($num) < 4 && intval($num + 1) > 5000)) {
 |函数名称|作用|特性|
 | --- | --- | --- |
 |[is_numeric()](https://www.php.net/manual/zh/function.is-numeric.php)|检测变量是否为数字或数字字符串|科学计数法|
-|[intval()](https://www.php.net/manual/zh/function.intval.php)|获取变量的整数值|1. 成功时返回`value`的`integer`值，失败时返回`0`。 空的 array 返回     `0`，非空的`array`返回`1`。<br /> 2. 如果 base 是 0，通过检测 value 的格式来决定使用的进制<br />3. 科学计数法，在PHP5.6、7.0与7.1版本表现不一致|
+|[intval()](https://www.php.net/manual/zh/function.intval.php)|获取变量的整数值|1. 成功时返回`value`的`integer`值，失败时返回`0`。 空的 array 返回     `0`，非空的`array`返回`1`。<br /> 2. 如果 base 是 0，通过检测 value 的格式来决定使用的进制<br />3. 科学计数法，7.1.0后发现变化|
 |[preg_replace()](https://www.php.net/manual/zh/function.preg-replace.php)|执行一个正则表达式的搜索和替换|1.`/e`修饰符，代码执行|
 |[preg_match()](https://www.php.net/manual/zh/function.preg-match.php)|执行匹配正则表达式|1.数组返回false <br /> 2. 换行 <br /> 3. 回溯次数限制绕过|
 |[in_array()](https://www.php.net/manual/zh/function.in-array.php)、[array_search()](https://www.php.net/manual/zh/function.array-search.php)|检查数组中是否存在某个值|如果没有设置strict，则使用松散比较
@@ -151,27 +187,60 @@ var_dump((array)json_decode('{"key":"value", "2":2,"3":"3"}'));
 var_dump((array)json_decode('{"a":[1,[2,3],4]}'));
 ```
 
-## 变量覆盖漏洞
+### 例题分析
 
-变量覆盖漏洞是指通过自定义的参数值控制原有变量值。
+#### 例题1
 
-- [可变变量`$$`](https://www.php.net/manual/zh/language.variables.variable.php) - 一个变量的变量名可以动态的设置和使用
-- [parse_str()](https://www.php.net/manual/zh/function.parse-str.php) - 将字符串解析成多个变量
-- [extract()](http://php.adamharvey.name/manual/zh/function.extract.php) - 从数组中将变量导入到当前的符号表
-- [import_request_variables()](http://php.adamharvey.name/manual/zh/function.import-request-variables.php) -  将 GET／POST／Cookie 变量导入到全局作用域中
+```php
+<?php
+$num = $_GET['num'];
+// 条件1 $num 不是数字字符串
+// 条件2 字符串$num与整数1松散比较相等
+// PHP8以下，前导数字字符串 ?num=1a
+if (!is_numeric($num) && $num == 1) {
+    echo 'flag{**********}';
+}
 
-练习题目
-  - ISCC_2019_web4
+// PHP8以下，前导数字字符串 ?num=1235a
+if (!is_numeric($num) && $num > 1234) {
+  echo 'flag{**********}';
+}
 
-## 浮点数精度绕过
+// $num 字符串长度最大为3，最大为999
+// 算术操作加法，$num 字符串转换为数字
+// 科学计数法 ?num=1e9
+if (strlen($num) < 4 && intval($num + 1) > 5000)) {
+    echo 'flag{**********}';
+}
+```
 
-- 在小数小于某个值（10^-16）以后，再比较的时候就分不清大小了
-- 常量
-	- `NaN`，
-	- `INF`，无穷大
+#### 例题2
 
-- 题目
-  - ciscn2020-easytrick
+```php
+<?php
+highlight_file(__FILE__);
+
+if (isset($_GET['money'])) {
+    $money = $_GET['money'];
+    if (strlen($money) <= 4 && $money > time() && !is_array($money)) {
+        echo 'flag{**********}';
+    } else {
+        echo "Wrong Answer!";
+    }
+} else {
+    echo "Wrong Answer!";
+}
+?>
+```
+
+?> `$money`为什么不能是数组？假设`$money`是数组，能否满足条件1和2？
+
+在比较运算符中，运算数1类型为数组，与任何其他类型比较，数组总是更大。参考[比较运算符](https://www.php.net/manual/zh/language.operators.comparison.php)
+
+```
+?money=1e9
+?money[]=
+```
 
 ## 哈希函数比较
 
@@ -188,6 +257,7 @@ if ($str1 != $str2) if (md5($str1) == md5($str2)) die($flag);
 ```
 md5('240610708') == md5('QNKCDZO')
 ```
+
 ### 数组绕过
 
 `md5(array)`，如果参数类型为数组，返回`NULL`
@@ -267,6 +337,58 @@ for($i;;$i++) if(substr(md5($i), 0, 6) == "******") die("$i");
 练习题目
 - 2017-HackDatKiwi-md5games1
 - 2018-强网杯-web签到
+
+## 变量覆盖漏洞
+
+变量覆盖漏洞是指通过自定义参数值控制原有变量的值。
+
+- [可变变量`$$`](https://www.php.net/manual/zh/language.variables.variable.php) - 一个变量的变量名可以动态设置和使用
+- [parse_str()](https://www.php.net/manual/zh/function.parse-str.php) - 将字符串解析成多个变量
+- [extract()](http://php.adamharvey.name/manual/zh/function.extract.php) - 从数组中导入变量到当前符号表
+- [import_request_variables()](http://php.adamharvey.name/manual/zh/function.import-request-variables.php) -  将 GET／POST／Cookie 变量导入全局作用域
+
+### 例题分析
+
+题目来源：ISCC_2019_web4
+
+```php
+<?php
+error_reporting(0);
+include("flag.php");
+$hashed_key = 'ddbafb4eb89e218701472d3f6c087fdf7119dfdd560f9d1fcbe7482b0feea05a';
+$parsed = parse_url($_SERVER['REQUEST_URI']);
+if (isset($parsed["query"])) {
+    $query = $parsed["query"];
+    $parsed_query = parse_str($query);
+    if ($parsed_query != NULL) {
+        $action = $parsed_query['action'];
+    }
+
+    if ($action === "auth") {
+        $key = $_GET["key"];
+        $hashed_input = hash('sha256', $key);
+        if ($hashed_input !== $hashed_key) {
+            die("<img src='cxk.jpg'>");
+        }
+
+        echo $flag;
+    }
+} else {
+    show_source(__FILE__);
+}
+```
+
+## 浮点数精度绕过
+
+- 在小数小于某个值（10^-16）以后，再比较的时候就分不清大小了
+- 常量
+	- `NaN`，
+	- `INF`，无穷大
+
+- 题目
+  - ciscn2020-easytrick
+
+
 
 
 ## PCRE回溯次数限制绕过

