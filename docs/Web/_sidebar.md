@@ -5,13 +5,13 @@
 - [目录遍历（Directory Traversal）](Web/directory-traversal.md)
 - [代码注入](Web/code-injection.md)
 - [命令注入](Web/command-injection.md)
-- [SQL注入基础（SQLi）](Web/SQLi.md)
-- [SQL注入进阶（bypass）](Web/SQLi_bypass.md)
 - [文件上传](Web/file-upload.md)
 - [文件包含（File Inclusion）](Web/PHP-file-inclusion.md)
 - [跨站脚本攻击（XSS）](Web/XSS.md)
 - [跨站请求伪造（CSRF）](Web/CSRF.md)
 - [服务端请求伪造（SSRF）](Web/SSRF.md)
+- [SQL注入基础（SQLi）](Web/SQLi.md)
+- [SQL注入进阶（bypass）](Web/SQLi_bypass.md)
 - **进阶**
 - [PHP反序列化漏洞](Web/PHP-Deserialization.md)
 - [服务端模板注入（SSTI）](Web/SSTI.md)
@@ -23,6 +23,6 @@
 - [哈希长度扩展攻击]()
 - [CBC字节翻转攻击]()
 - **高级**
-- [Python安全专题]()
+- [Python安全专题](Web/Python.md)
 - [NodeJS安全专题]()
 - [Java安全专题]()

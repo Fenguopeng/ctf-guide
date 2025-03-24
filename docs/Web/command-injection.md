@@ -10,12 +10,12 @@
 
 |名称|例子|说明|
 |---|---|---|
-|;|`whoami;ls`|命令的结束符，使得一行可以放置多个命令，命令从左到右顺序执行，所有命令都会执行。Windows系统下命令提示符`cmd`无此语法|
-|&&|`whoami&&ls`|逻辑与，只有第一条命令执行成功，才会执行第二条命令|
-|\|\||`whoami\|\|ls`|逻辑或，只有第一条命令执行失败，才会执行第二条命令|
-|\|||管道符，两条命令都执行，其中第一条命令的输出作为第二条命令的输入，即不显示第一条命令的输出|
-|&||后台执行，两条命令都执行|
-|%0A||PHP环境下|
+|;|`whoami;ls`|命令的结束符，允许一行多个命令从左到右顺序执行，所有命令都会执行。Windows系统下命令提示符`cmd`无此语法。|
+|&&|`whoami&&ls`|逻辑与，只有第一条命令成功执行，才会执行第二条命令。|
+|\|\||`whoami\|\|ls`|逻辑或，只有第一条命令失败时，才会执行第二条命令。|
+|\|||管道符，两个命令都执行，第一条命令的输出作为第二条命令的输入，第一条命令的输出不显示。|
+|&||后台执行，两个命令同时执行。|
+|%0A||PHP环境下使用。|
 
 
 输入输出重定向
@@ -50,15 +50,14 @@ PHP中的[escapeshellcmd()](https://www.php.net/manual/zh/function.escapeshellcm
 /ls|dir/
 ```
 
-- 读文件
+- 读文件内容
 
-```
-/cat|tac|tail|head|more|less|uniq|strings|sort|/
+```php
+/cat|tac|tail|head|more|less|uniq|strings|sort|od|/
 ```
 
-```
+```php
 if (!preg_match('/|dir|nl|nc||flag|sh|cut|awk||od|curl|ping|\*||ch|zip|mod|sl|find|sed|cp|mv|ty|grep|fd|df|sudo||cc||\.|{|}|tar|zip|gcc||vi|vim|file|xxd|base64|date|bash|env|\?|wget|\'|\"|id|whoami/i', $cmd)) {
-        echo "11";
         echo system($cmd);
   }
 ```
@@ -492,6 +491,8 @@ if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
 将非字母、数字的字符经过各种变换，构造出字母、数字，进而得到函数名，结合PHP动态函数的特点，达到执行代码的目的。
 
 PHP 7引入了抽象语法树（AST），与PHP 5在[关于间接使用变量、属性和方法的变化](https://www.php.net/manual/zh/migration70.incompatible.php)。特别说明的是，PHP 7支持`'phpinfo'()`、`('phpinfo')()`。
+
+$_GET[_] 8个字符
 
 - 按位异或XOR`^`
 

@@ -10,7 +10,7 @@
 - [DOC隐写](Misc/Steganography/)
 - [文档](Misc/Steganography/)
 - **取证**
-- [流量分析]()
+- [流量分析](Misc/Forensic/Network-Analysis.md)
 - [日志分析]()
 - [磁盘取证分析]()
 - [内存取证分析]()
