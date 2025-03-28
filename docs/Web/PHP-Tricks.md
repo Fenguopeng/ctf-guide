@@ -334,6 +334,12 @@ if(substr(md5($str), 0, 6) == "******") die($flag);
 for($i;;$i++) if(substr(md5($i), 0, 6) == "******") die("$i"); 
 ```
 
+### `md5($str,true)`
+
+与SQL注入结合
+<!--
+与SQL注入结合
+-->
 练习题目
 - 2017-HackDatKiwi-md5games1
 - 2018-强网杯-web签到

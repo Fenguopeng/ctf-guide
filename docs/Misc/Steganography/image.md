@@ -5,7 +5,17 @@
 [BMP](https://zh.wikipedia.org/wiki/BMP)是一种独立于显示器的位图数字图像文件格式，**通常不压缩**，体积大，不适合在因特网上传输。
 
 ![](https://upload.wikimedia.org/wikipedia/commons/7/75/BMPfileFormat.svg)
+
 ## PNG
+
+PNG 文件包括以下主要部分：
+
+文件头（Signature）：每个 PNG 文件以字节序列 `89 50 4E 47 0D 0A 1A 0A` 开头。
+块（Chunks）：PNG 文件由多个不同类型的块组成，每个块包含特定的信息和数据。主要块包括：
+IHDR：图像头，包含图像宽度、高度、颜色类型等信息。
+PLTE：调色板块（可选），定义用于图像的颜色调色板。
+IDAT：图像数据块，存储图像的实际像素数据。
+IEND：图像结束块，指示文件的结尾。
 
 ### 修改高度
 ### IDAT

@@ -26,7 +26,7 @@ http://example.com/?code=phpinfo();
 
 代码量较大，通过编程语言的相关函数实现文件管理、数据库管理和系统命令执行等功能。可以通过 [Github搜索](https://github.com/search?q=webshell+php&type=repositories) 获取 PHP 大马文件，但请注意辨别是否存在后门。
 
-![PHP大马](https://github.com/WhiteWinterWolf/wwwolf-php-webshell/raw/master/screenshot.png)
+![PHP大马](../../../assets/img/webshell-screenshot.png)
 
 - 小马
 
