@@ -1,22 +1,6 @@
 # 古典密码学
 
-相比与现代密码，古典密码是密码学的一个类型，大部分加密方式是**代换**和**置换**。
-
-## 字母频率分析
-
-字母频率是字母表中的字母在书面语言中出现的平均次数。Herbert S. Jim 在他的经典密码入门书《Codes and Secret Writing》中提到，最常见字母频率排列顺序是`ETAON RISHD LFCMU GYPWB VKJXZQ`，最常见的字母对是`TH HE AN RE ER IN ON AT ND ST ES EN OF TE ED OR TI HI AS TO`，最常见的双字母是`LL EE SS OO TT FF RR NN PP CC`。其按照大小排序后英文字母频率如下图。需要注意的是，不同的计数方法可能会导致排序略有不同，也是说不同的来源结果略有不同。
-
-![](../../../assets/img/English_letter_frequency.png)
-
-在古典密码中，如果密文并没有改变字母的出现频率，如凯撒密码，我们可以通过字母频率分析进行破解。如果在CTF解题中，可以使用在线工具 https://quipqiup.com/ 辅助解题。
-
-```
-garyxqhqlxfwhswjxhzsrhxdwrxcwhxvrwlrqsfwbvxnqbwvcgawgxvfhpdrcgarfwgcwjrjyrbqsgaxcswjxhzxcwhcqfwhhrdwsrhxdgarfawbwfgrbxcgxfsrwgpbrcqsfwgcawnrrnqhnrdgqcpttqbgwfwbvxnqbqpchxsrcgzhruxgawdwtgwgxqvcsqbwjypcaqbcgwhkxvlwvdcaqbgtpbcpxgapvgxvlgarzawnrlbwfxhrwvdjpcfphwbyqdxrccgbqvlshroxyhrsqbrhxjycwvdbrgbwfgwyhrfhwucsqbaqhdxvltbrzdrvgwhwvdfbwvxwhwdwtgwgxqvcsqbwcgbqvlyxgrwvdqsgrvawnrfawbwfgrbxcgxfcgbxtrdqbctqggrdfqwgtwggrbvcsqbfwjqpshwlrfwgcwbrqyhxlwgrfwbvxnqbrcjrwvxvlgarzwbrdrtrvdrvgqvvpgbxrvgcxvwvxjwhshrcasqbcpbnxnwhwvdyrfwpcrqsgarhwblrtbqtqbgxqvqsjrwgxvgarxbdxrgwbrcqjrgxjrcbrsrbbrdgqwcaztrbfwbvxnqbrcqsgargrbbrcgbxwhswjxhxrcxvgarqbdrbfwbvxnqbwgarzwbrgarcgbxfgrcgfwbvxnqbrchxnxvlfwgcyrhqvlgqguqcpyswjxhxrcgartwvgarbxvwrwvdsrhxvwrgarsqbjrbfqjtbxcrcgaryxlfwgcgargxlrbhxqviwlpwbhrqtwbdcvquhrqtwbdfhqpdrdhrqtwbdwvdcpvdwfhqpdrdhrqtwbdsrhxvwrfqjtbxcrcwhhgarvqvtwvgarbxvrfwgcuaxfabwvlrxvcxersbqjgarcjwhhbpcgzctqggrdfwggqgaryxlfwgcxerdtpjwwvdxvfhpdrccpfadxnrbcrsqbjcwcgarhzvoqfrhqgcrbnwhwvdfarrgwawcurhhwcgardqjrcgxffwggarwvcurbxciwlpwbpvdx
-```
-
-```
-the biological family felidae is a lineage of carnivorans that includes the cats a member of this family is also called a felid the characteristic features of cats have evolved to support a carnivorous lifestyle with adaptations for ambush or stalking and short pursuit hunting they have gracile and muscular bodies strong flexible for elimbs and retractable claws for holding prey dental and cranial adaptations for a strong bite and often have characteristic striped or spotted coat patterns for camouflage cats are obligate carnivores meaning they are dependent on nutrients in animal flesh for survival and because of the large proportion of meat in their diet are sometimes referred to as hyper carnivores of the terrestrial families in the order carnivora they are the strictest carnivores living cats belong to two subfamilies the pantherinae and felinae the former comprises the big cats the tiger lion jaguar leopard snow leopard clouded leopard and sunda clouded leopard felinae comprises all the nonpantherine cats which range in size from the small rusty spotted cat to the big cat sized puma and includes such diverse forms as the lynx ocelot serval and cheetah as well as the domestic cat the answer is jaguarundi
-```
+古典密码是指在现代计算机技术出现之前使用的加密方法，主要基于字符，分为两种类型：`代换密码`和`置换密码`。
 
 ## 代换（替换）密码（Substitution Cipher）
 
@@ -33,33 +17,79 @@ the biological family felidae is a lineage of carnivorans that includes the cats
 
 当密钥空间足够大，且密文长度足够短的情况下，破解较为困难。
 
+#### 单字母替换密码（Mono-Alphabetic Substitution Cipher）
+
+每个字母被固定的替换为另一个字母。
+
+```python
+key = {
+    "a": "f",
+    "b": "y",
+    "c": "a",
+    "d": "b",
+    "e": "z",
+    "f": "c",
+    "g": "m",
+    "h": "s",
+    "i": "n",
+    "j": "t",
+    "k": "o",
+    "l": "h",
+    "m": "q",
+    "n": "v",
+    "o": "r",
+    "p": "x",
+    "q": "w",
+    "r": "i",
+    "s": "k",
+    "t": "u",
+    "u": "l",
+    "v": "j",
+    "w": "p",
+    "x": "g",
+    "y": "d",
+    "z": "e"
+}
+
+secret = "The trouble with having an open mind, of course, is that people will insist on coming along and trying to put things in it.".lower()
+secret = filter(str.isalpha, secret)
+
+encrypted = "".join([key[i] for i in secret])
+print(encrypted)
+#uszuirlyhzpnussfjnvmfvrxzvqnvbrcarlikznkusfuxzrxhzpnhhnvknkurvarqnvmfhrvmfvbuidnvmurxluusnvmknvnu
+```
+
+由于密文中的字母频率没有变化，在较长的密文和英文文本的情况下，可以通过字母频率分析来破解密码。可以使用在线工具 <https://quipqiup.com/> 辅助解密。
+
+![quipqiup](../assets/images/quipqiup.gif)
+
+- <https://cryptii.com/pipes/alphabetical-substitution>
+- <https://www.101computing.net/mono-alphabetic-substitution-cipher/>
+
 #### 移位密码（凯撒密码）
 
-移位密码（Shift Cipher）是一种单字母替换密码，将明文中每个字母在字母表中向后（或向前）移动固定长度后得到密文。例如，当偏移量是3时，所有的字母A将被替换成D，B变成E，以此类推。
+移位密码（Shift Cipher），又称凯撒密码（Caesar Cipher），是一种单字母替换密码，它通过将明文中每个字母在字母表中向前或向后移动固定的长度来生成密文。例如，当偏移量为 3 时，字母`A`会被替换为`D`，字母`B`会变成`E`，以此类推。
 
-![](../../../assets/img/CaesarCipher-1.png)
+![CaesarCipher](../assets/images/CaesarCipher-1.png)
 
-移位密码也被称为凯撒密码（Caesar Cipher），凯撒密码是以罗马共和时期凯撒的名字命名的，据称当年凯撒曾用此方法与其将军们进行联系。
-移位密码的密钥是0到25之间的整数，因此可以通过穷举法进行破解。
-根据偏移量不同，还存在若干特定的移位密码名称：
+> 移位密码的密钥是 0 到 25 之间的整数，因此可以通过穷举法进行破解。
 
-- 偏移量为10：
-- 偏移量为13：ROT-13
-- 偏移量为-5：
-- 偏移量为-6：
+#### ROT系列密码
 
-ROT系列
+- [ROT13](https://rot13.com/)，实际上是凯撒密码的一种，位移量为 13，仅适用于字母，连续两次加密可恢复明文。
+- [ROT47](https://rot47.net/)，处理 ASCII 码在 33 到 126 之间的字符，默认旋转位移为 47 。
+- [ROT8000](https://rot8000.com/)，通过将每个 Unicode 字符向前或向后移动`0x8000`个位置。
 
-#### 埃特巴什码
+#### 埃特巴什码（Atbash Cipher）
 
-埃特巴什码（Atbash Cipher）是一种单字母替换密码，使用字母表中的最后一个字母代表第一个字母，倒数第二个字母代表第二个字母。
+埃特巴什码（Atbash Cipher）是一种单字母替换密码，采用字母表中的最后一个字母代表示第一个字母，倒数第二个字母表示第二个字母，以此类推。
 
 ```
 明文：ABCDEFGHIJKLMNOPQRSTUVWXYZ
 密文：ZYXWVUTSRQPONMLKJIHGFEDCBA
 ```
 
-例如，`MIRROR`加密为`NRIILI`。埃特巴什码也称为`镜像密码`。
+例如，明文`MIRROR`加密为`NRIILI`。埃特巴什码也被称为`镜像密码`。
 
 <!-- #### rabbit -->
 
@@ -94,17 +124,17 @@ $$
 
 培根密码（Bacon Cipher），又叫倍康尼密码，是由法兰西斯·培根发明的一种替换密码。加密时，明文中的每个字母都会替换成一组五个英文字母。其转换依靠下表：
 
-![](../../../assets/img/BaconCipher-2.png)
+![BaconCipher](../assets/images/BaconCipher-2.png)
 
 转换表有两个版本。一是`i` 和`j`、`u`和`v`使用相同的编码。二是所有字母使用不同的编码。
 例如，对明文`hello world`进行加密。步骤如下：
 第一步，将`H`替换为`aabbb`，`E`替换为`aabaa`等等
 
-![](../../../assets/img/BaconCipher-helloworld-1.png)
+![](../assets/images/BaconCipher-helloworld-1.png)
 
 第二步，隐藏信息。常规字体表示`a`，粗体表示`b`
 
-![](../../../assets/img/BaconCipher-helloworld-2.png)
+![](../assets/images/BaconCipher-helloworld-2.png)
 
 也可以使用大小写来隐藏信息。
 
@@ -122,15 +152,23 @@ UTFLAG{CRISPYBACONCIPHER}
 
 ### 多表代换
 
-多表代换密码与单表代换密码不同，不是代换单个字符，而是代换整个字符组。多表代换密码在加密后，明文字符的频率会被改变，无法通过词频分析破解。
+在多表代换中，由于使用不同的字母表或关键词，相同的明文字母在不同的位置可能会对应不同的密文字母，实现`动态替换`。同时，明文字符的频率被改变，从而抵抗词频分析攻击。
 
-#### 棋盘密码
+<!-- #### 棋盘密码 -->
 
 #### 维吉尼亚密码（Vigenère Cipher）
 
-维吉尼亚密码是将明文字符和密钥作为索引值。如果密钥字符比明文字符短，那么密钥会通过重复使用的方式扩展至明文的长度。
+维吉尼亚密码是一种基于凯撒密码的加密算法，属于多表代换的简单形式。
 
-#### 普莱费尔密码
+加密时，密钥长度必须与明文长度相等，如果关键词长度不足，需要将其扩展至明文长度。该算法有重复（`Repeat`）和自钥（`Autokey`）两种模式，默认使用`重复模式`，即固定关键词重复扩展，如关键词为`key`时重复扩展为`keykey....`。自钥模式则是将关键词与明文组合形成密钥，如`key明文`。
+
+![维吉尼亚密码字母表](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Vigen%C3%A8re_square_shading.svg/900px-Vigen%C3%A8re_square_shading.svg.png)
+
+例如，明文`HELLOWORLD`，关键词`SECRET`，对于明文第 1 个字母 `H`，对应密钥的第 1 个字母 `S`，于是使用第 S 行字母进行加密，得到密文第一个字母 `Z`，以此类推，密文为`ZINCSPGVNU`。
+
+- <https://cryptii.com/pipes/vigenere-cipher>
+
+#### 普莱费尔密码（Playfair Cipher）
 
 普莱费尔密码（Playfair Cipher）是第一个二字母替换密码，1854 年由英国人查尔斯 · 惠斯通（Charles Wheatstone）发明，基本算法如下：
 
@@ -165,21 +203,24 @@ https://github.com/Dvd848/CTFs/blob/master/2021_picoCTF/Play_Nice.md -->
 
 #### [猪圈密码](https://www.dcode.fr/pigpen-cipher)（Pigpen Cipher）
 
-猪圈密码是一种以格子为基础的图形代换密码。
+猪圈密码是一种以格子为基础的图形代换密码，最初由希伯来拉比和圣殿骑士使用。它通过将字母放置在“#”和“X”图形中，通过附近的线条和点表示编码字母，主要有两个版本：原始版本和修改版本。
 
-![](../../../assets/img/PigpenCipher-1.png)
+![猪圈密码](../assets/images/PigpenCipher-1.png)
 
-例如，明文`X marks the spot`的密文如下
+例如，明文`X marks the spot`的密文如下：
 
-![](../../../assets/img/PigpenCipher-2.jpg)
+![猪圈密码示例](../assets/images/PigpenCipher-2.jpg)
 
-在线网站: https://www.dcode.fr/pigpen-cipher
+在线加解密网站：
+
+- <https://rumkin.com/tools/cipher/pigpen/>
+- <https://www.dcode.fr/pigpen-cipher>
 
 <!-- #### 键盘密码 -->
 
-#### 跳舞小人密码
+#### 跳舞小人密码（Dancing Men Cipher）
 
-![](https://p9-tt-ipv6.byteimg.com/large/pgc-image/85c18be4a7824119a16b443f047341c6)
+![跳舞小人](https://p9-tt-ipv6.byteimg.com/large/pgc-image/85c18be4a7824119a16b443f047341c6)
 
 #### 键盘密码
 
@@ -220,16 +261,32 @@ https://github.com/Dvd848/CTFs/blob/master/2021_picoCTF/Play_Nice.md -->
 
 ### 栅栏密码
 
-栅栏密码（Rail Fence Cipher）是把明文分成N个一组，取每组的第一个字符连起来得到密文1，取每组的第二个字符连起来得到密文2，依次类推，最后将密文1、密文2....连接形成密文。栅栏密码根据分为传统型（W型）和N型
-例如
+栅栏密码（Rail Fence Cipher）通过将文本以波浪形排列实现。根据排列形状，分为W型（传统型）和N型。以下是对明文`helloworld`按照3栏加密的传统型示例。
 
-明文：
+- 默认偏移`offset`为 0，密文为`holelwrdlo`。
 
 ```
-THISISCIPHER
+h...o...l.
+.e.l.w.r.d
+..l...o...
 ```
 
-https://www.geocachingtoolbox.com/index.php?page=railFenceCipher
+- 若偏移`offset`为 1，密文为`lrhloolewd`
+
+```
+...l...r..
+h.l.o.o.l.
+.e...w...d
+```
+
+例题分析：
+
+`Ta _7N6DDDhlg:W3D_H3C31N__0D3ef sHR053F38N43D0F i33___NA`
+，原文中存在
+在线加解密网站：
+
+- <https://www.geocachingtoolbox.com/index.php?page=railFenceCipher>
+- <https://rumkin.com/tools/cipher/rail-fence/>
 
 <!-- ### 曲路密码 -->
 
