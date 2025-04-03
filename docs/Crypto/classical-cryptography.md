@@ -8,7 +8,7 @@
 
 破解代换加密的基本方法是用统计手段，即统计语言中的一些字或字母出现频率的规律。
 
-### 单表代换
+### 单表代换密码
 
 单表代换密码是在明文和密文之间建立一一映射关系，也就是说明文与密文一一对应。所以有以下两种方式来进行破解：
 
@@ -150,7 +150,7 @@ UTFLAG{CRISPYBACONCIPHER}
 
 <!-- #### 希尔密码（Hill Cipher）希尔密码（Hill Cipher） -->
 
-### 多表代换
+### 多表代换密码
 
 在多表代换中，由于使用不同的字母表或关键词，相同的明文字母在不同的位置可能会对应不同的密文字母，实现`动态替换`。同时，明文字符的频率被改变，从而抵抗词频分析攻击。
 
@@ -199,7 +199,7 @@ $$
 <!-- 例题： [picoCTF 2021 Play nice](https://ctftime.org/task/15292)
 https://github.com/Dvd848/CTFs/blob/master/2021_picoCTF/Play_Nice.md -->
 
-### 图形代换
+### 图形代换密码
 
 #### [猪圈密码](https://www.dcode.fr/pigpen-cipher)（Pigpen Cipher）
 

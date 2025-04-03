@@ -341,6 +341,7 @@ for($i;;$i++) if(substr(md5($i), 0, 6) == "******") die("$i");
 与SQL注入结合
 -->
 练习题目
+
 - 2017-HackDatKiwi-md5games1
 - 2018-强网杯-web签到
 
@@ -384,18 +385,40 @@ if (isset($parsed["query"])) {
 }
 ```
 
+## 双引号字符串中含有`RTLO`等格式字符
+
+[格式字符介绍](https://www.w3.org/International/questions/qa-bidi-unicode-controls#basedirection)
+
+RTLO 字符，全称为 Right-to-Left Override，是一个 Unicode 控制字符，编码为 U+202E。它的作用是改变文本的显示方向，使其从右向左显示，这对于支持阿拉伯语、希伯来语等从右向左书写的语言非常有用。
+
+```php
+echo "\u{202E}abc"; // cba
+```
+
+PHP 的代码高亮函数，其颜色显示是根据`php.ini`定义显示，注释、默认、HTML、关键词和字符串显示不同颜色。
+
+![](http://oss.dropsec.xyz/book/phpinfo-highlight.png)
+
+假设我们需要遇到这样一道题目，浏览器显示源码如图所示。
+
+![](http://oss.dropsec.xyz/book/RTLO1.png)
+
+图中有三个注释，其中第三个`//sha2`显示的颜色与前两个不同。原因在于真正的`$_GET`参数不是所谓看见的`sha2`，而是包含有控制字符的字符串，导致浏览器渲染显示时产生位置偏移，我们需要从十六进制层面获取真正的参数名称。可通过`burp`或`wireshark`抓包，也可以直接复制粘贴代码，获取参数值。由于是不可打印字符，发送时需要 URL 编码。
+
+在做题中，可以通过颜色判断或者鼠标双击选择变量，来发现是否设置了考点。
+
+- Hack.lu CTF 2018 Baby PHP
+- ISCC 2023 小周的密码锁
+
 ## 浮点数精度绕过
 
 - 在小数小于某个值（10^-16）以后，再比较的时候就分不清大小了
 - 常量
-	- `NaN`，
-	- `INF`，无穷大
+  - `NaN`，
+  - `INF`，无穷大
 
 - 题目
   - ciscn2020-easytrick
-
-
-
 
 ## PCRE回溯次数限制绕过
 
@@ -418,7 +441,7 @@ PCRE（Perl Compatible Regular Expressions）是一个Perl语言兼容的正则�
 
 默认情况下，量词都是`贪婪`的，也就是说， 它们会在不导致模式匹配失败的前提下，尽可能多的匹配字符(直到最大允许的匹配次数)。
 
-然而，如果一个量词紧跟着一个`?`(问号) 标记，它就会成为懒惰(非贪婪)模式， 它不再尽可能多的匹配，而是尽可能少的匹配。 
+然而，如果一个量词紧跟着一个`?`(问号) 标记，它就会成为懒惰(非贪婪)模式， 它不再尽可能多的匹配，而是尽可能少的匹配。
 
 `<?php phpinfo();?>//aaaaaa`，执行过程如下：
 
@@ -446,7 +469,7 @@ print(res.headers)
 ### 修复建议
 
 PHP文档上有关于`preg_match`的警告，应使用全等`===`来测试函数的返回值。
- 
+
 ```php
 <?php
 function is_php($data){  
@@ -462,7 +485,7 @@ if(is_php($input) === 0) {
 
 [PHP正则表达式文档](https://www.php.net/manual/zh/book.pcre.php)
 
-https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html
+<https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html>
 
 ## 经典赛题分析
 
@@ -504,21 +527,21 @@ $num5 = filter($ppp['number5']);
 if (isset($num1) && is_numeric($num1)) {
     die("非数字");
 } else {
-	// 前导数字字符串，松散比较，num1=1025a
+ // 前导数字字符串，松散比较，num1=1025a
     if ($num1 > 1024) {
         echo "第一层";
-		// 科学计数法，$num2=5e5
+  // 科学计数法，$num2=5e5
         if (isset($num2) && strlen($num2) <= 4 && intval($num2 + 1) > 500000) {
             echo "第二层";
-			// md5截断碰撞，$num3=61823470
+   // md5截断碰撞，$num3=61823470
             if (isset($num3) && '4bf21cd' === substr(md5($num3), 0, 7)) {
                 echo "第三层";
-				// 前导数字字符串0或纯字母字母串，$num4=aaaaaaa
+    // 前导数字字符串0或纯字母字母串，$num4=aaaaaaa
                 if (!($num4 < 0) && ($num4 == 0) && ($num4 <= 0) && (strlen($num4) > 6) && (strlen($num4) < 8) && isset($num4)) {
                     echo "第四层";
                     if (!isset($num5) || (strlen($num5) == 0)) die("no");
-					// json_decode返回值，通过恰当的 PHP 类型返回在 json 中编码的数据。值 true、false 和 null 会相应地返回 true、false 和 null。如果 json 无法被解码，或者编码数据深度超过了嵌套限制的话，将会返回 null 。
-					// 1. $num5=null 2. $num5=a
+     // json_decode返回值，通过恰当的 PHP 类型返回在 json 中编码的数据。值 true、false 和 null 会相应地返回 true、false 和 null。如果 json 无法被解码，或者编码数据深度超过了嵌套限制的话，将会返回 null 。
+     // 1. $num5=null 2. $num5=a
                     $b = json_decode(@$num5);
                     if ($y = $b === NULL) {
                         if ($y === true) {
@@ -552,7 +575,6 @@ ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=0aaaaaa&p
 ppp[number1]=1025a&ppp[number2]=5e5&ppp[number3]=61823470&ppp[number4]=abcdefg&ppp[number5]=null
 ```
 
-
 ### 2022-ISCC-冬奥会
 
 ```php
@@ -567,31 +589,31 @@ $info = (array)json_decode(@$_GET["Information"]);
 
 if (is_array($info)) {
 
-	var_dump($info);
+ var_dump($info);
     //  不能是数字或数字字符串
-	is_numeric(@$info["year"]) ? die("Sorry~") : NULL;
-	if (@$info["year"]) {
+ is_numeric(@$info["year"]) ? die("Sorry~") : NULL;
+ if (@$info["year"]) {
         // 字符串与数字松散比较，前导数字字符串 $info["year"]='2022a'
-		($info["year"] == 2022) ? $Step1 = True : NULL;
-	}
+  ($info["year"] == 2022) ? $Step1 = True : NULL;
+ }
     // $info["items"]必须是数组
-	if (is_array(@$info["items"])) {
+ if (is_array(@$info["items"])) {
         // $info["items"][1] 是数组
         // $info["items"]数组元素数量=3
-		if (!is_array($info["items"][1]) or count($info["items"]) !== 3) die("Sorry~");
-		// array_search() 松散比较，0 == "skiing"
+  if (!is_array($info["items"][1]) or count($info["items"]) !== 3) die("Sorry~");
+  // array_search() 松散比较，0 == "skiing"
         $status = array_search("skiing", $info["items"]);
-		$status === false ? die("Sorry~") : NULL;
-		foreach ($info["items"] as $key => $val) {
-			$val === "skiing" ? die("Sorry~") : NULL;
-		}
-		$Step2 = True;
-	}
+  $status === false ? die("Sorry~") : NULL;
+  foreach ($info["items"] as $key => $val) {
+   $val === "skiing" ? die("Sorry~") : NULL;
+  }
+  $Step2 = True;
+ }
 }
 
 if ($Step1 && $Step2) {
-	include "2022flag.php";
-	echo $flag;
+ include "2022flag.php";
+ echo $flag;
 }
 ```
 
@@ -604,51 +626,51 @@ if ($Step1 && $Step2) {
 ```php
 <?php
 function MyHashCode($str) {
-	$h = 0;
-	$len = strlen($str);
-	for ($i = 0; $i < $len; $i++) {
-		$hash = intval40(intval40(40 * $hash) + ord($str[$i]));
-	}
-	return abs($hash);
+ $h = 0;
+ $len = strlen($str);
+ for ($i = 0; $i < $len; $i++) {
+  $hash = intval40(intval40(40 * $hash) + ord($str[$i]));
+ }
+ return abs($hash);
 }
 
 function intval40($code) {
-	// 位运算符，$code 向右移动32位
-	$falg = $code >> 32;
-	// $code向右移动32位后，若等于1
-	// $code 范围在 2的32次方---2的33次方-1
-	if ($falg == 1) {
-		// 位运算符，取反
-		$code = ~($code - 1);
-		return $code * -1;
-	} else {
-		// $code向右移动32位后，不等于1
-		return $code;
-	}
+ // 位运算符，$code 向右移动32位
+ $falg = $code >> 32;
+ // $code向右移动32位后，若等于1
+ // $code 范围在 2的32次方---2的33次方-1
+ if ($falg == 1) {
+  // 位运算符，取反
+  $code = ~($code - 1);
+  return $code * -1;
+ } else {
+  // $code向右移动32位后，不等于1
+  return $code;
+ }
 }
 function Checked($str) {
-	$p1 = '/ISCC/';
-	if (preg_match($p1, $str)) {
-		return false;
-	}
-	return true;
+ $p1 = '/ISCC/';
+ if (preg_match($p1, $str)) {
+  return false;
+ }
+ return true;
 }
 
 function SecurityCheck($sha1, $sha2, $user) {
 
-	$p1 = '/^[a-z]+$/';
-	$p2 = '/^[A-Z]+$/';
+ $p1 = '/^[a-z]+$/';
+ $p2 = '/^[A-Z]+$/';
 
-	if (preg_match($p1, $sha1) && preg_match($p2, $sha2)) {
-		$sha1 = strtoupper($sha1);
-		$sha2 = strtolower($sha2);
-		$user = strtoupper($user);
-		$crypto = $sha1 ^ $sha2;
-	} else {
-		die("wrong");
-	}
+ if (preg_match($p1, $sha1) && preg_match($p2, $sha2)) {
+  $sha1 = strtoupper($sha1);
+  $sha2 = strtolower($sha2);
+  $user = strtoupper($user);
+  $crypto = $sha1 ^ $sha2;
+ } else {
+  die("wrong");
+ }
 
-	return array($crypto, $user);
+ return array($crypto, $user);
 }
 error_reporting(0);
 
@@ -660,48 +682,49 @@ $sha2 = $_GET['‮⁦//sha2⁩⁦sha2'];
 //‮⁦see me ⁩⁦can you
 
 if (isset($_GET['password'])) {
-	if ($_GET['password2'] == 5) {
-		show_source(__FILE__);
-	} else {
-		//Try to encrypt
-		if (isset($sha1) && isset($sha2) && isset($user)) {
-			[
-				$crypto,
-				$user
-			] = SecurityCheck($sha1, $sha2, $user);
+ if ($_GET['password2'] == 5) {
+  show_source(__FILE__);
+ } else {
+  //Try to encrypt
+  if (isset($sha1) && isset($sha2) && isset($user)) {
+   [
+    $crypto,
+    $user
+   ] = SecurityCheck($sha1, $sha2, $user);
             // 哈希函数的截断碰撞
             // 设 $crypto === $user
-			if ((substr(sha1($crypto), -6, 6) === substr(sha1($user), -6, 6)) && (substr(sha1($user), -6, 6)) === 'a05c53') {
-				//welcome to ISCC
+   if ((substr(sha1($crypto), -6, 6) === substr(sha1($user), -6, 6)) && (substr(sha1($user), -6, 6)) === 'a05c53') {
+    //welcome to ISCC
 
                 // $_GET['password'] 不能包含 ISCC
-				if ((MyHashcode("ISCCNOTHARD") === MyHashcode($_GET['password'])) && Checked($_GET['password'])) {
-					include("f1ag.php");
-					echo $flag;
-				} else {
-					die("就快解开了!");
-				}
-			} else {
-				die("真的想不起来密码了吗?");
-			}
-		} else {
-			die("密钥错误!");
-		}
-	}
+    if ((MyHashcode("ISCCNOTHARD") === MyHashcode($_GET['password'])) && Checked($_GET['password'])) {
+     include("f1ag.php");
+     echo $flag;
+    } else {
+     die("就快解开了!");
+    }
+   } else {
+    die("真的想不起来密码了吗?");
+   }
+  } else {
+   die("密钥错误!");
+  }
+ }
 }
 
 mt_srand((microtime() ^ rand(1, 10000)) % rand(1, 1e4) + rand(1, 1e4));
 ?>
 ```
 
-
 1. `$_GET['username']`哈希函数的截断碰撞，`username=14987637`
+
 ```php
 for($i;;$i++) if(substr(sha1($i), -6, 6) == "a05c53") die("$i");
 // 14987637
 ```
 
 2. 取`$sha1='AAAAAAAA'`，得`$sha2=puxyvwrv`
+
 ```php
 echo '14987637' ^ 'AAAAAAAA'; // puxyvwrv
 ```
