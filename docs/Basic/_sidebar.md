@@ -1,28 +1,30 @@
-- **原理**
+- [计算机基础](computer.md)
+- [网络基础]()
+- [PC端优秀软件推荐]()
+- **虚拟化环境**
+- [VMware虚拟机](Basic/vmware.md)
+- [WSL](Basic/wsl.md)
+- [Docker](Basic/docker.md)
+- **Linux 101**
+- [Bash基础](Basic/Linux/Bash.md)
+- **Web安全基础**
 - [网站工作原理](Basic/how_the_Web_works.md)
 - [HTTP协议](Basic/HTTP.md)
-- **常用工具**
-- [VMware虚拟机的安装与使用方法](Basic/vmware.md)
+- [搭建PHP Web环境](Basic/php-web.md)
+- [搭建Java Web环境](Basic/java-web.md)
+- [搭建Python Web环境](Basic/python-web.md)
+- **Web安全工具**
 - [010Editor的安装与激活](Basic/010Editor.md)
+- [Burp Suite Pro](Basic/burp/burp.md)
 - [Chrome浏览器的插件推荐](Basic/chrome)
-- [安装Docker]()
-- **Linux**
-- [Bash基础](Basic/Linux/Bash.md)
-- **PHP Web环境**
-- [搭建LAMP环境](Basic/LAMP.md)
-- [搭建WAMP环境](Basic/WAMP.md)
-- [VS Code配合Docker的使用](Basic/Docker.md)
-- **漏洞靶场环境**
+- **Web漏洞靶场**
 - [搭建DVWA](Basic/DVWA.md)
 - [搭建upload-labs](Basic/upload-labs.md)
 - [搭建SQLi-Labs](Basic/SQLi-Labs.md)
 - [搭建XSS测试平台](Basic/)
 - **Burp Suite**
-- [Burp Suite Pro的安装与激活](Basic/burp/burp.md)
 - [Chrome与Burp Suite配合使用](Basic/burp-chrome.md)
 - [Burp Suite的主要功能介绍](Basic/burp-chrome.md)
-- [Burp Suite Intruder]()
-- **sqlmap**
-- **Nmap**
-- **Java Web环境**
-- **Python Web环境**
+- **Reverse基础**
+- **Crypto基础**
+- **Android基础**
