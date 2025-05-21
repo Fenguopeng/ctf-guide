@@ -1,6 +1,6 @@
 # 古典密码学
 
-古典密码是指在现代计算机技术出现之前使用的加密方法，主要基于字符，分为两种类型：`代换密码`和`置换密码`。
+古典密码是指在现代计算机技术出现之前使用的加密方法，主要**基于字符**，分为两种类型：`代换密码`和`置换密码`。
 
 ## 代换（替换）密码（Substitution Cipher）
 
@@ -130,11 +130,11 @@ $$
 例如，对明文`hello world`进行加密。步骤如下：
 第一步，将`H`替换为`aabbb`，`E`替换为`aabaa`等等
 
-![](../assets/images/BaconCipher-helloworld-1.png)
+![BaconCipher-helloworld-1](../assets/images/BaconCipher-helloworld-1.png)
 
 第二步，隐藏信息。常规字体表示`a`，粗体表示`b`
 
-![](../assets/images/BaconCipher-helloworld-2.png)
+![BaconCipher-helloworld-2](../assets/images/BaconCipher-helloworld-2.png)
 
 也可以使用大小写来隐藏信息。
 
