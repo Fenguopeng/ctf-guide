@@ -75,6 +75,30 @@ solve_stego()
 
 ## NTFS 交换数据流隐写
 
+NTFS（New Technology File System）是微软公司开发的一种文件系统，广泛应用于 Windows 操作系统。与早期的文件系统（如 FAT32）相比，支持访问控制列表（ACL）、支持扩展文件属性和数据流（如交换数据流）等等。
+
+交换数据流（Alternate Data Streams, ADS） 是 NTFS 文件系统的一种高级特性，允许一个文件存储多个数据流。除了默认的数据流（文件的主体内容），用户可以创建附加的数据流，从而在一个文件中存储不同的信息。数据流使用 `filename:streamname` 的格式表示。例如，文件 `example.txt` 可以有一个名为 `secret` 的数据流，表示为：
+
+- 创建数据流
+
+```cmd
+echo "hello world!" > example.txt:secret
+```
+
+- 查询数据流
+
+在`cmd`下使用`dir /R`命令可查看交换数据流。
+
+- 读取数据流
+
+```
+notepad example.txt:secret
+```
+
+常用工具如下：
+
+- NTFS ADS Scanner
+
 ## Whitespace隐写
 
 ## `.pyc`隐写

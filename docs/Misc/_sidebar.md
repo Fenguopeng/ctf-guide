@@ -7,7 +7,7 @@
 - [音频隐写](Misc/Steganography/audio.md)
 - [视频隐写](Misc/Steganography/video.md)
 - [文档隐写](Misc/Steganography/document.md)
-- [其他](Misc/Steganography/others.md)
+- [其他隐写](Misc/Steganography/others.md)
 - **取证分析**
 - [流量分析](Misc/Forensic/Network-Analysis.md)
 - [日志分析]()

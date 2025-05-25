@@ -71,10 +71,19 @@ for i in range(0x00, 0xff):
 
 ![CyberChef XOR Brute Force](../../assets/images/cyberchef-xor-brute-force.png)
 
-## binwalk
+## 字母频率统计
 
-formost
-dd
-stegdetect
+```bash
+$ cat flag.txt | fold -w1 | sort | uniq -c | sort -nr
+2508 G
+   2481 X
+   2453 Y
+   2301 {
+   2221 g
+   2087 a
+```
 
-010 Editor的安装、破解
+- `fold -w1` 将每个字符放在单独的一行。
+- `sort` 对字符进行排序。
+- `uniq -c` 统计出现次数。
+- `sort -nr` 根据出现次数从高到低排序。

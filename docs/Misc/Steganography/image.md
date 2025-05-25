@@ -82,6 +82,13 @@ IDAT 中的数据是通过 zlib（DEFLATE压缩算法）压缩的像素数据流
 
 #### 例题2
 
+```bash
+pngcheck
+
+```
+
+tweakpng
+
 ## JPG
 
 JPEG（JPG）是一种广泛应用的**有损压缩**图像格式，具备`压缩比灵活`、`不支持透明通道`
@@ -264,6 +271,7 @@ jphide
 | **WbStego**| 多格式隐写工具                | 支持多种图片格式的隐写，界面友好      | 兼容多种隐写算法，适合初学者使用        |  
 | **jphide** | 基于 JPEG 文件的隐写         | 用于在 JPEG 图片中隐藏和提取数据     | 经典 JPEG 隐写工具，命令行操作         |  
 | **jsteg**  | JPEG 隐写，专注单比特隐写       | 通过 LSB 技术隐藏数据，支持签名和验证  | 轻量且支持密码签名，适合对抗追踪攻击      |  
+| **Steghide** |||
 
 <https://github.com/DominicBreuker/stego-toolkit>
 
