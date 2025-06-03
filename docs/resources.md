@@ -11,100 +11,100 @@
 
 <div class="grid-container">
 
-  <figure> 
-   <img src="https://cdn.ptpress.cn/pubcloud/bookImg/A20232208/20240321B35D64AF.jpg" alt="CTF快速上手：PicoCTF真题解析（Web篇）" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://cdn.ptpress.cn/pubcloud/bookImg/A20232208/20240321B35D64AF.jpg" alt="CTF快速上手：PicoCTF真题解析（Web篇）" style="height:250px" />
+   <figcaption>
     <cite>CTF快速上手：PicoCTF真题解析（Web篇）</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>李华峰</span>
-    <br /> 
-    <span><b>出版时间:</b>2024-03</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2024-03</span>
+   </figcaption>
   </figure>
   
- <figure> 
-   <img src="https://image12.bookschina.com/2023/20231126/1/9176102.jpg" alt="AWD特训营：技术解析、赛题实战与竞赛技巧" style="height:250px" /> 
-   <figcaption> 
+ <figure>
+   <img src="https://image12.bookschina.com/2023/20231126/1/9176102.jpg" alt="AWD特训营：技术解析、赛题实战与竞赛技巧" style="height:250px" />
+   <figcaption>
     <cite>AWD特训营：技术解析、赛题实战与竞赛技巧</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>吴涛、张道全、王玉琪</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-10</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-10</span>
+   </figcaption>
   </figure>
 
   <figure>
   <img src="https://image12.bookschina.com/2023/20230921/1/9155453.jpg" alt="CTF那些事儿" style="height:250px">
-  <figcaption> 
+  <figcaption>
     <cite>CTF那些事儿</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>北航Lancet战队</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-08</span> 
+    <br />
+    <span><b>出版时间:</b>2023-08</span>
    </figcaption>
    </figure>
 
-   <figure> 
-   <img src="https://image12.bookschina.com/2023/20230615/1/9103627.jpg" alt="CTF实战:从入门到提升" style="height:250px" /> 
-   <figcaption> 
+   <figure>
+   <img src="https://image12.bookschina.com/2023/20230615/1/9103627.jpg" alt="CTF实战:从入门到提升" style="height:250px" />
+   <figcaption>
     <cite>CTF实战:从入门到提升</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>苗春雨、叶雷鹏（恒星实验室）</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-05</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-05</span>
+   </figcaption>
   </figure>
 </figure>
 
-<figure> 
-   <img src="https://image12.bookschina.com/2023/20231211/1/9129286.jpg" alt="CTF实战 技术、解题与进阶" style="height:250px" /> 
-   <figcaption> 
+<figure>
+   <img src="https://image12.bookschina.com/2023/20231211/1/9129286.jpg" alt="CTF实战 技术、解题与进阶" style="height:250px" />
+   <figcaption>
     <cite>CTF实战 技术、解题与进阶</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>ChaMd5安全团队</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-07</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-07</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2021/20210430/1/8543218.jpg" alt="极限黑客攻防:CTF赛题揭秘" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2021/20210430/1/8543218.jpg" alt="极限黑客攻防:CTF赛题揭秘" style="height:250px" />
+   <figcaption>
     <cite>极限黑客攻防:CTF赛题揭秘</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>天融信阿尔法实验室</span>
-    <br /> 
-    <span><b>出版时间:</b>2021-05</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2021-05</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2020/20201121/1/8412789.jpg" alt="从0到1：CTFer成长之路" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2020/20201121/1/8412789.jpg" alt="从0到1：CTFer成长之路" style="height:250px" />
+   <figcaption>
     <cite>从0到1：CTFer成长之路</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>Null战队</span>
-    <br /> 
-    <span><b>出版时间:</b>2020-09</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2020-09</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2020/20200903/2/8347202.jpg" alt="CTF特训营" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2020/20200903/2/8347202.jpg" alt="CTF特训营" style="height:250px" />
+   <figcaption>
     <cite>CTF特训营:技术详解、解题方法与竞赛技巧</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>FlappyPig战队</span>
-    <br /> 
-    <span><b>出版时间:</b>2020-06</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2020-06</span>
+   </figcaption>
   </figure>
 </div>
-
 
 ## CTF在线训练平台
 
 ### 国内
+
 - [NSSCTF|在线CTF平台](https://www.nssctf.cn/)
 - [BUUCTF在线评测](https://buuoj.cn/)
 - [ctf.show](https://ctf.show/)
@@ -130,48 +130,48 @@
 ## Web安全漏洞原理
 
 <div class="grid-container">
-<figure> 
-   <img src="https://image12.bookschina.com/2023/20231207/2/9144003.jpg" alt="白帽子讲WEB安全 第2版" style="height:250px" /> 
-   <figcaption> 
+<figure>
+   <img src="https://image12.bookschina.com/2023/20231207/2/9144003.jpg" alt="白帽子讲WEB安全 第2版" style="height:250px" />
+   <figcaption>
     <cite>白帽子讲WEB安全 第2版</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>吴翰清,叶敏</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-08</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-08</span>
+   </figcaption>
   </figure>
 
-<figure> 
-   <img src="https://image12.bookschina.com/2023/20231210/2/9131674.jpg" alt="Web安全攻防:渗透测试实战指南(第二版)" style="height:250px" /> 
-   <figcaption> 
+<figure>
+   <img src="https://image12.bookschina.com/2023/20231210/2/9131674.jpg" alt="Web安全攻防:渗透测试实战指南(第二版)" style="height:250px" />
+   <figcaption>
     <cite>Web安全攻防:渗透测试实战指南(第二版)</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>MS08067安全实验</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-07</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-07</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2024/20240128/2/9070422.jpg" alt="Web漏洞解析与攻防实战" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2024/20240128/2/9070422.jpg" alt="Web漏洞解析与攻防实战" style="height:250px" />
+   <figcaption>
     <cite>Web漏洞解析与攻防实战</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>王放(do9gy)，龚潇(phithon)，王子航</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-04</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-04</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2015/20150301/6832186.jpg" alt="Web安全深度剖析" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2015/20150301/6832186.jpg" alt="Web安全深度剖析" style="height:250px" />
+   <figcaption>
     <cite>Web安全深度剖析</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>张炳帅</span>
-    <br /> 
-    <span><b>出版时间:</b>2015-04</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2015-04</span>
+   </figcaption>
   </figure>
 </div>
 
@@ -179,70 +179,70 @@
 
 <div class="grid-container">
 
-  <figure> 
-   <img src="http://books.ms08067.com/booklist/images/nwaqgfhdzl.jpg" alt="内网安全攻防:红队之路" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="http://books.ms08067.com/booklist/images/nwaqgfhdzl.jpg" alt="内网安全攻防:红队之路" style="height:250px" />
+   <figcaption>
     <cite>内网安全攻防:红队之路</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>MS08067安全实验</span>
-    <br /> 
-    <span><b>出版时间:</b>2024-03</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2024-03</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://images.weserv.nl/?url=https://img-blog.csdnimg.cn/direct/676791851a4b47aeab809004c0604419.png" alt="权限提升技术:攻防实战与技巧" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://images.weserv.nl/?url=https://img-blog.csdnimg.cn/direct/676791851a4b47aeab809004c0604419.png" alt="权限提升技术:攻防实战与技巧" style="height:250px" />
+   <figcaption>
     <cite>权限提升技术:攻防实战与技巧</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>美创科技 柳遵梁</span>
-    <br /> 
-    <span><b>出版时间:</b>2024-01</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2024-01</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2024/20240204/1/9239841.jpg" alt="内网渗透 实战攻略" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2024/20240204/1/9239841.jpg" alt="内网渗透 实战攻略" style="height:250px" />
+   <figcaption>
     <cite>内网渗透 实战攻略</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>美创科技 柳遵梁</span>
-    <br /> 
-    <span><b>出版时间:</b>2024-01</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2024-01</span>
+   </figcaption>
   </figure>
 
-<figure> 
-   <img src="https://image12.bookschina.com/2023/20230124/1/8987145.jpg" alt="域渗透攻防指南" style="height:250px" /> 
-   <figcaption> 
+<figure>
+   <img src="https://image12.bookschina.com/2023/20230124/1/8987145.jpg" alt="域渗透攻防指南" style="height:250px" />
+   <figcaption>
     <cite>域渗透攻防指南</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>谢兆国（网络ID：谢公子）</span>
-    <br /> 
-    <span><b>出版时间:</b>2023-01</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2023-01</span>
+   </figcaption>
   </figure>
 
-<figure> 
-   <img src="https://image12.bookschina.com/2022/20221016/2/8935097.jpg" alt="内网渗透体系建设" style="height:250px" /> 
-   <figcaption> 
+<figure>
+   <img src="https://image12.bookschina.com/2022/20221016/2/8935097.jpg" alt="内网渗透体系建设" style="height:250px" />
+   <figcaption>
     <cite>内网渗透体系建设</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>Nu1L战队</span>
-    <br /> 
-    <span><b>出版时间:</b>2022-09</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2022-09</span>
+   </figcaption>
   </figure>
 
-  <figure> 
-   <img src="https://image12.bookschina.com/2020/20200725/1/8260441.jpg" alt="内网安全攻防:渗透测试实战指南" style="height:250px" /> 
-   <figcaption> 
+  <figure>
+   <img src="https://image12.bookschina.com/2020/20200725/1/8260441.jpg" alt="内网安全攻防:渗透测试实战指南" style="height:250px" />
+   <figcaption>
     <cite>内网安全攻防:渗透测试实战指南</cite>
-    <br /> 
+    <br />
     <span><b>作者:</b>MS08067安全实验</span>
-    <br /> 
-    <span><b>出版时间:</b>2018-01</span> 
-   </figcaption> 
+    <br />
+    <span><b>出版时间:</b>2018-01</span>
+   </figcaption>
   </figure>
 
 </div>
@@ -361,7 +361,6 @@
     </figcaption>
   </figure>
   
-
   <figure>
   <img src="https://images.weserv.nl/?url=https://img9.doubanio.com/view/subject/l/public/s28261244.jpg" alt="揭秘家用路由器0day漏洞挖掘技术" style="height:250px" />
     <figcaption>
@@ -376,7 +375,6 @@
   </figure>
 
 </div>
-
 
 ## 电子图书仓库
 

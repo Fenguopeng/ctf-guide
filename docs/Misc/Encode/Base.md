@@ -31,12 +31,6 @@ A-Z（26个大写字母）
 
 ## Base85
 
-EZ_XOR
-
-AAoHAR1WX1VQVlNVU1VRUl5XXyMjI1FWJ1IjUCQnXlZWXyckXhs=
-
-flag{09360535374819EEE70A4E6BA8009AB8}
-
 ## 例题分析
 
 + 例题-`Base`
@@ -51,7 +45,19 @@ flag{09360535374819EEE70A4E6BA8009AB8}
 首先十六进制解码，得`13+5=???----zmjtpm88usfgzmyttsdgtmeizlltxzmezadjvmofusegrbwkzwfjzayozdmu7===`，提示字符串`13+5=???-`，有效字符串只有小写字母和数字，且存在数字`8`，判断不是转为大写后得`Base 32`，根据提示`13+5`，需要对字母和数字作如下转换：
 
 + 小写字母进行`ROT 13`
-+ 数字进行`ROT 10`
++ 数字进行`ROT 5`
 + 转为大写字母并`Base 32`解码
 
+[CyberChef](https://gchq.github.io/CyberChef/#recipe=ROT13(true,true,false,13)ROT13(false,false,true,5)To_Upper_case('All')From_Base32('A-Z2-7%3D',true)&input=em1qdHBtODh1c2Znem15dHRzZGd0bWVpemxsdHh6bWV6YWRqdm1vZnVzZWdyYndrendmanpheW96ZG11Nz09PQ&ieol=CRLF&oeol=NEL)
+
 FLAG：`flag{9e6ef1a3f5f0e31cadd29c297bef5ad2}`
+
+## 练习题
+
+### EZ_XOR
+
+题目来源：2018护网杯线上赛
+
+`AAoHAR1WX1VQVlNVU1VRUl5XXyMjI1FWJ1IjUCQnXlZWXyckXhs=`
+
+FLAG：`flag{09360535374819EEE70A4E6BA8009AB8}`

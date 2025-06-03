@@ -1,58 +1,48 @@
-# XML外部实体
+# XML外部实体注入
 
-XML外部实体（XML External Entity，XXE）
+XML 外部实体注入（XXE）是一种发生在应用程序解析 XML 输入时的安全漏洞。当 XML 解析器配置不当，处理包含对外部实体引用的 XML 输入时，可能导致敏感信息泄露、拒绝服务、服务器端请求伪造、端口扫描等多种攻击。
 
 ![https://cdn.acunetix.com/wp-content/uploads/2017/07/11110336/image1.png](https://cdn.acunetix.com/wp-content/uploads/2017/07/11110336/image1.png)
 
 - 读取本地文件
 - 内网主机探测
 - 内网主机端口扫描
-带内实体注入攻击 - XML解析后，有结果回显
-基于错误
+带内实体注入攻击
+- XML 解析后，有结果回显
+- 基于错误
 带外实体注入攻击
 
 ## XML语法
 
-可扩展标记语言（E**x**tensible **M**arkup **L**anguage，XML）是一种标记语言。XML是从标准通用标记语言（SGML）中简化修改出来的。它被设计用来传输和存储数据。[^1] 
+XML（E**x**tensible **M**arkup **L**anguage，可扩展标记语言）是一种用于表示结构化数据的标记语言。一个有效的 XML 文档通常包含以下几个基本部分：
 
-- XML声明（declaration），如`<?xml version="1.0" encoding="UTF-8"?>`
-- 文档类型定义（Document Type Definition，DTD），可以看成一个或者多个XML文件的模板，在这里可以定义XML文件中的元素、元素的属性、元素的排列方式、元素包含的内容等等。[^2]
-  - 实体类型 - 内部实体和外部实体，通用实体和参数实体
+- **XML 声明（declaration）**：可选，通常放在文档的第一行，声明版本和编码方式。
+  - `<?xml version="1.0" encoding="UTF-8"?>`
+- **文档类型定义（Document Type Definition，DTD）**：可选，预定义 XML 文件中的元素、属性及其关系，类似于模板。
+- **根元素**：XML 文档必须**有且只有一个根元素**，所有其他元素都包含在这个根元素内。
+  - 元素标签，所有的元素由起始标签和结束标签组成。起始标签格式为 `<tagname>`，结束标签格式为 `</tagname>`。标签名称区分大小写。
+  - 自闭合元素，没有结束标签，使用自闭合标签，`<example />`。
+  - 属性，元素具有属性，用于提供更多信息。属性在起始标签中定义，格式为 `name="value"`。
+
+### 实体
+
+实体（Entity）用于表示在文档中重用的信息，实体类型有：
+  
+- 内部实体，在文档内部定义。
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Person [ 
-  <!ENTITY name "John"> 
+<!DOCTYPE example [
+    <!ENTITY greeting "Hello, World!">
 ]>
-<Person>
-<Name>&name;</Name>
-<Age>20</Age>
-</Person>
+<example>
+    <message>&greeting;</message>
+</example>
 ```
 
-[^1]: [XML - w3school](https://www.w3school.com.cn/xml/index.asp)
-[^2]: [DTD - w3school](https://www.w3school.com.cn/dtd/index.asp)
-
-### 通用实体
-
-在DTD中定义，在XML文档中引用
-
-声明方式：`<!ENTITY 实体名称 "实体的值">`
-
-引用方式：`&实体名称;`
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE foo [ <!ENTITY myentity "my entity value" > ]>
-<foo>&myentity;</foo>
-```
-
-### 外部实体
-可以从本地或远程调用实体
-
-声明方式：`<!ENTITY 实体名称 SYSTEM "URI/URL">`
-
-引用方式：`&实体名称;`
+- 外部实体
+  - 从外部文件或 URL 引入。
+  - 声明方式：`<!ENTITY 实体名称 SYSTEM "URI/URL">`。
+  - 引用方式：`&实体名称;`。
 
 ```xml
 <!DOCTYPE foo [ <!ENTITY ext SYSTEM "http://normal-website.com" > ]>
@@ -63,13 +53,10 @@ XML外部实体（XML External Entity，XXE）
 
 `<!DOCTYPE 根元素名称 PUBLIC "DTD标识名" "公用DTD的URI">`
 
-
-### 参数实体
-在DTD中定义，只能在DTD中引用
-
-声明方式：`<!ENTITY % 实体名称 "实体的值">`
-
-引用方式：`%实体名称;`
+- 参数实体
+  - 参数实体通常用于 DTD 中，以在 DTD 结构内重用文本。在 DTD 中定义，只能在 DTD 中引用。
+  - 声明方式：`<!ENTITY % 实体名称 "实体的值">`
+  - 引用方式：`%实体名称;`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -81,7 +68,9 @@ XML外部实体（XML External Entity，XXE）
 
 > 通常在Blind XXE中使用
 
-## 读文件
+## XXE漏洞利用
+
+### 读文件
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,14 +84,15 @@ XML外部实体（XML External Entity，XXE）
 <data>&example;</data>
 ```
 
-## 内网主机探测
+例题：BUU XXE COURSE 1
 
+### 内网主机探测
 
-## 绕过方法
+[NCTF2019]True XML cookbook
+
+### 绕过方法
 
 - 修改编码
-
-
 
 <!--
 TODO:
@@ -110,8 +100,15 @@ docx文档的XXE，https://xz.aliyun.com/t/11203
 
 -->
 
-通用实体、参数实体、预定义实体
+## blind XXE
 
-## 经典赛题分析
+### out-of-band
+
+### Error-based XXE
+
+<!-- 在 libxml 2.9.0 版本之后，默认禁用了外部实体解析，这在很大程度上缓解了 XXE 漏洞。 -->
+<!-- https://github.com/peri0d/BUUOJwp/blob/main/xxe/bsidescf-2019-svgmagic.md -->
 ## 参考资料
-- https://tttang.com/archive/1716/
+
+- <https://tttang.com/archive/1716/>
+- <https://swarm.ptsecurity.com/impossible-xxe-in-php/>

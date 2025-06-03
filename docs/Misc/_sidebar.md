@@ -12,5 +12,5 @@
 - [流量分析](Misc/Forensic/Network-Analysis.md)
 - [日志分析]()
 - [磁盘取证分析]()
-- [内存取证分析]()
+- [内存取证分析](Misc/Forensic/Memory.md)
 - [压缩包分析](Misc/Forensic/compressed-archive.md)

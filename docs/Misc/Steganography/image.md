@@ -1,4 +1,6 @@
-# 图片隐写
+# 图像隐写术
+
+图像隐写术是一种将数据（包括文本、图像、音频、视频）隐藏在图像中，使人类通常无法区分处理过的图像和原始图像的技术。
 
 ## BMP
 
@@ -150,6 +152,13 @@ GIF（Graphics Interchange Format，图形交换格式）是一种由美国技�
 
 要分离 GIF 文件，可以使用`convert`命令将其每一帧分割开：
 
+`imagemagick`安装
+
+```bash
+sudo apt update
+sudo apt install imagemagick
+```
+
 ```bash
 convert filename.gif output.png
 ```
@@ -201,7 +210,7 @@ rgb = []
 
 # 读取每个图像并获取左上角像素的 RGB 值
 for i in range(1089):
-    with Image.open(f"frames/1-{i}.png") as img:
+    with Image.open(f"frame-{i}.png") as img:
         # 将图像转换为 RGBA 格式（如果不是的话）
         img = img.convert("RGBA")
         # 获取左上角像素的颜色
@@ -213,14 +222,14 @@ output = Image.new("RGB", (33, 33))
 
 # 根据条件设置每个像素的颜色
 for index, j in enumerate(rgb):
-    x = index % 33  # 计算 x 坐标
-    y = index // 33  # 计算 y 坐标
+    red, green, blue, alpha = j  # 解包 RGBA 值
 
-    # 获取红色分量，决定该位置为黑色或白色
-    if j[0] == 1:  # 使用红色分量来决定颜色
-        output.putpixel((x, y), (0, 0, 0))  # 黑色
+    print(red, green, blue, alpha)
+
+    if blue == 1:
+        output.putpixel((red, green), (0, 0, 0))  # 黑色
     else:
-        output.putpixel((x, y), (255, 255, 255))  # 白色
+        output.putpixel((red, green), (255, 255, 255))
 
 # 显示和保存新创建的图像
 output.show()
@@ -231,11 +240,9 @@ FLAG：`antd3ctf{G1F_0R_C0L0R_0R_QRC0D3_0R_WHAT???}`
 
 #### 相关题目
 
-1. A
-
 ### 考点总结
 
-## Exif
+## EXIF
 
 [Exif](https://zh.wikipedia.org/wiki/Exif)（Exchangeable image file format，可交换图像文件格式）是专门为数码相机的照片设定的文件格式，可以记录数码照片的属性信息和拍摄数据。
 
@@ -243,6 +250,15 @@ FLAG：`antd3ctf{G1F_0R_C0L0R_0R_QRC0D3_0R_WHAT???}`
 ```
 
 ## LSB隐写
+
+通过修改图像中每个像素的最低有效位（Least Significant Bit，LSB），将秘密数据嵌入到图像中，而不会明显改变图像的视觉外观。
+
+![https://miro.medium.com/v2/resize:fit:1300/format:webp/0*MQgIxjo4eKj3b-l6](https://miro.medium.com/v2/resize:fit:1300/format:webp/0*MQgIxjo4eKj3b-l6)
+![](https://miro.medium.com/v2/resize:fit:1400/0*ijRQv5bQj4UZg-V1)
+
+### 参考资料
+
+- <https://medium.com/analytics-vidhya/shh-your-secret-is-safe-a-simple-guide-to-steganography-in-python-89116582277e>
 
 ## 数字水印
 

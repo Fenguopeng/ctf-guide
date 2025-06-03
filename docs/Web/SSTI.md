@@ -63,3 +63,5 @@ request["__class__"]
 ### `[ ]`
 
 ### `|join`
+
+## PHP SSTI

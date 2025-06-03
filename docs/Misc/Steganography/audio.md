@@ -84,7 +84,7 @@ print("单声道WAV文件已生成：", output_file)
 ... -.-. - ..-. -.. . ... .---- .-. ...-- ..--.- -.. .-. .. ...- . ... ..--.- .. -. - ----- ..--.- ...- .- .--. --- .-. .-- .--.-. ...- . ...
 ```
 
-在[CyberChef](gchq.github.io/CyberChef/#recipe=From_Morse_Code('Space','Line%20feed')&input=Li4uIC0uLS4gLSAuLi0uIC0uLiAuIC4uLiAuLS0tLSAuLS4gLi4uLS0gLi4tLS4tIC0uLiAuLS4gLi4gLi4uLSAuIC4uLiAuLi0tLi0gLi4gLS4gLSAtLS0tLSAuLi0tLi0gLi4uLSAuLSAuLS0uIC0tLSAuLS4gLi0tIC4tLS4tLiAuLi4tIC4gLi4u)上解码即可。
+在[CyberChef](https://gchq.github.io/CyberChef/#recipe=From_Morse_Code('Space','Line%20feed')&input=Li4uIC0uLS4gLSAuLi0uIC0uLiAuIC4uLiAuLS0tLSAuLS4gLi4uLS0gLi4tLS4tIC0uLiAuLS4gLi4gLi4uLSAuIC4uLiAuLi0tLi0gLi4gLS4gLSAtLS0tLSAuLi0tLi0gLi4uLSAuLSAuLS0uIC0tLSAuLS4gLi0tIC4tLS4tLiAuLi4tIC4gLi4u)上解码即可。
 
 方法二：
 
@@ -108,7 +108,17 @@ print("单声道WAV文件已生成：", output_file)
 
 ## LSB
 
+### `MP33stego`
+
+[MP3stego](https://www.petitcolas.net/steganography/mp3stego/)
+
 ## 工具
 
+[WAV]
+
+[Steghide]
+
+[AudioStego](https://github.com/danielcardeenas/AudioStego)
+
+- [Audacity](https://www.audacityteam.org/download/windows/)
 - [sonic visualiser](https://www.sonicvisualiser.org/)
-- Audacity

@@ -40,3 +40,7 @@ execfile('/usr/lib/python2.7/os.py')
 system('ls')
 
 ```
+
+## 沙箱逃逸
+
+## Pickle 反序列化
